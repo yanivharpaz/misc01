@@ -1,0 +1,30 @@
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.kafka:kafka-clients:2.8.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+application {
+    mainClassName = "org.example.KafkaConsumerExample"
+//        mainClassName = "org.example.ElasticsearchWriter"
+}
+
+
+test {
+    useJUnitPlatform()
+}
