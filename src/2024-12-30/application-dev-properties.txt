@@ -1,0 +1,16 @@
+# Development Environment Configuration
+kafka.bootstrap.servers=localhost:9092
+kafka.group.id=kafka-to-elasticsearch-consumer-dev
+kafka.source.topic=my-topic-dev
+kafka.dlq.topic=my-topic-dlq-dev
+kafka.consumer.auto.offset.reset=earliest
+kafka.consumer.enable.auto.commit=false
+
+elasticsearch.host=localhost
+elasticsearch.port=9200
+elasticsearch.scheme=http
+
+batch.size=100
+batch.timeout.ms=3000
+
+index.prefix=prd_a_dev_

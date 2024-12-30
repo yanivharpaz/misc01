@@ -1,0 +1,16 @@
+# Production Environment Configuration
+kafka.bootstrap.servers=kafka1:9092,kafka2:9092,kafka3:9092
+kafka.group.id=kafka-to-elasticsearch-consumer-prod
+kafka.source.topic=my-topic-prod
+kafka.dlq.topic=my-topic-dlq-prod
+kafka.consumer.auto.offset.reset=latest
+kafka.consumer.enable.auto.commit=false
+
+elasticsearch.host=es-cluster
+elasticsearch.port=9200
+elasticsearch.scheme=https
+
+batch.size=1000
+batch.timeout.ms=5000
+
+index.prefix=prd_a_
