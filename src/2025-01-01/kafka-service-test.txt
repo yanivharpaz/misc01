@@ -1,0 +1,138 @@
+package org.example.service;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.TopicPartition;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.Duration;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.Future;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class KafkaServiceTest {
+
+    @Mock
+    private KafkaConsumer<String, String> mockConsumer;
+
+    @Mock
+    private KafkaProducer<String, String> mockProducer;
+
+    @Mock
+    private ConsumerRecords<String, String> mockRecords;
+
+    @Mock
+    private Future<RecordMetadata> mockFuture;
+
+    @Mock
+    private RecordMetadata mockMetadata;
+
+    private KafkaService kafkaService;
+    private Properties consumerProps;
+    private Properties producerProps;
+    private static final String SOURCE_TOPIC = "source-topic";
+    private static final String DLQ_TOPIC = "dlq-topic";
+
+    @BeforeEach
+    void setUp() {
+        consumerProps = new Properties();
+        consumerProps.setProperty("bootstrap.servers", "localhost:9092");
+        
+        producerProps = new Properties();
+        producerProps.setProperty("bootstrap.servers", "localhost:9092");
+        
+        kafkaService = new KafkaService(consumerProps, producerProps, SOURCE_TOPIC, DLQ_TOPIC);
+    }
+
+    @Test
+    void shouldSubscribeToTopic() {
+        // When
+        kafkaService.subscribe();
+
+        // Then
+        verify(mockConsumer).subscribe(Collections.singletonList(SOURCE_TOPIC));
+    }
+
+    @Test
+    void shouldPollRecords() {
+        // Given
+        Duration timeout = Duration.ofMillis(100);
+        when(mockConsumer.poll(timeout)).thenReturn(mockRecords);
+
+        // When
+        ConsumerRecords<String, String> records = kafkaService.pollRecords(timeout);
+
+        // Then
+        assertNotNull(records);
+        verify(mockConsumer).poll(timeout);
+    }
+
+    @Test
+    void shouldCommitOffset() {
+        // Given
+        ConsumerRecord<String, String> record = new ConsumerRecord<>(
+            SOURCE_TOPIC, 0, 123L, "key", "value"
+        );
+
+        // When
+        kafkaService.commitOffset(record);
+
+        // Then
+        verify(mockConsumer).commitSync(any());
+    }
+
+    @Test
+    void shouldSendToDlq() throws Exception {
+        // Given
+        ConsumerRecord<String, String> record = new ConsumerRecord<>(
+            SOURCE_TOPIC, 0, 123L, "key", "value"
+        );
+        Exception error = new RuntimeException("Test error");
+
+        when(mockProducer.send(any(ProducerRecord.class))).thenReturn(mockFuture);
+        when(mockFuture.get()).thenReturn(mockMetadata);
+
+        // When
+        kafkaService.sendToDlq(record, error);
+
+        // Then
+        verify(mockProducer).send(any(ProducerRecord.class));
+        verify(mockFuture).get();
+    }
+
+    @Test
+    void shouldHandleDlqSendFailure() throws Exception {
+        // Given
+        ConsumerRecord<String, String> record = new ConsumerRecord<>(
+            SOURCE_TOPIC, 0, 123L, "key", "value"
+        );
+        Exception error = new RuntimeException("Test error");
+
+        when(mockProducer.send(any(ProducerRecord.class)))
+            .thenThrow(new RuntimeException("DLQ send failed"));
+
+        // When/Then
+        assertThrows(Exception.class, () -> kafkaService.sendToDlq(record, error));
+    }
+
+    @Test
+    void shouldCloseProperlyOnShutdown() throws Exception {
+        // When
+        kafkaService.close();
+
+        // Then
+        verify(mockConsumer).close();
+        verify(mockProducer
