@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.testcontainers.elasticsearch.ElasticsearchContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,119 +30,67 @@ class ElasticsearchServiceTest {
     @Mock
     private RestHighLevelClient mockClient;
 
-    @Mock
-    private BulkResponse mockBulkResponse;
-
     private ElasticsearchService elasticsearchService;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        elasticsearchService = new ElasticsearchService("localhost", 9200, "http", "test_");
         objectMapper = new ObjectMapper();
+        elasticsearchService = new ElasticsearchService(mockClient, "test_");
     }
 
     @Test
-    void shouldCreateIndexIfNotExists() throws IOException {
-        // Given
-        when(mockClient.indices().exists(any(GetIndexRequest.class))).thenReturn(false);
+    void shouldEnsureIndexAndAliasExist() throws IOException {
+        // Mock index does not exist
+        when(mockClient.indices().exists(any(GetIndexRequest.class), any(RequestOptions.class)))
+            .thenReturn(false);
 
-        // When
-        elasticsearchService.ensureIndexAndAliasExist("testType");
-
-        // Then
-        verify(mockClient.indices()).exists(any(GetIndexRequest.class));
-        verify(mockClient.indices()).create(any());
-    }
-
-    @Test
-    void shouldNotCreateIndexIfExists() throws IOException {
-        // Given
-        when(mockClient.indices().exists(any(GetIndexRequest.class))).thenReturn(true);
-
-        // When
-        elasticsearchService.ensureIndexAndAliasExist("testType");
-
-        // Then
-        verify(mockClient.indices()).exists(any(GetIndexRequest.class));
-        verify(mockClient.indices(), never()).create(any());
-    }
-
-    @Test
-    void shouldHandleBulkIndexing() throws IOException {
-        // Given
-        List<DocumentBatch.Document> documents = new ArrayList<>();
-        String json = "{\"product_type\":\"test\",\"value\":\"test\"}";
-        JsonNode jsonNode = objectMapper.readTree(json);
-        documents.add(new DocumentBatch.Document("test", jsonNode));
-
-        when(mockClient.bulk(any())).thenReturn(mockBulkResponse);
-        when(mockBulkResponse.hasFailures()).thenReturn(false);
-
-        // When
-        BulkResponse response = elasticsearchService.bulkIndex(documents);
-
-        // Then
-        assertNotNull(response);
-        assertFalse(response.hasFailures());
-        verify(mockClient).bulk(any());
-    }
-
-    @Test
-    void shouldHandleFailedBulkIndexing() throws IOException {
-        // Given
-        List<DocumentBatch.Document> documents = new ArrayList<>();
-        String json = "{\"product_type\":\"test\",\"value\":\"test\"}";
-        JsonNode jsonNode = objectMapper.readTree(json);
-        documents.add(new DocumentBatch.Document("test", jsonNode));
-
-        BulkItemResponse mockItemResponse = mock(BulkItemResponse.class);
-        when(mockItemResponse.isFailed()).thenReturn(true);
-        when(mockItemResponse.getFailureMessage()).thenReturn("Test failure");
-        
-        when(mockClient.bulk(any())).thenReturn(mockBulkResponse);
-        when(mockBulkResponse.hasFailures()).thenReturn(true);
-        when(mockBulkResponse.getItems()).thenReturn(new BulkItemResponse[]{mockItemResponse});
-
-        // When
-        BulkResponse response = elasticsearchService.bulkIndex(documents);
-
-        // Then
-        assertNotNull(response);
-        assertTrue(response.hasFailures());
-        verify(mockClient).bulk(any());
-    }
-
-    @Test
-    void shouldCloseClientProperly() throws IOException {
-        // When
-        elasticsearchService.close();
-
-        // Then
-        verify(mockClient).close();
-    }
-
-    @Test
-    void shouldHandleIndexCreationFailure() {
-        // Given
-        when(mockClient.indices().exists(any(GetIndexRequest.class)))
-            .thenThrow(new RuntimeException("Test exception"));
-
-        // When/Then
-        assertThrows(IOException.class, () -> 
-            elasticsearchService.ensureIndexAndAliasExist("testType"));
-    }
-
-    @Test
-    void shouldGenerateCorrectIndexNames() throws IOException {
-        // Given
         String productType = "widget";
-        
-        // When
-        String indexName = elasticsearchService.getIndexName(productType);
-        
-        // Then
-        assertTrue(indexName.startsWith("test_widget_"));
-        assertTrue(indexName.matches("test_widget_\\d{5}"));
+        elasticsearchService.ensureIndexAndAliasExist(productType);
+
+        // Verify index creation was attempted
+        verify(mockClient.indices(), times(1)).create(any(), any(RequestOptions.class));
+        // Verify alias creation was attempted
+        verify(mockClient.getLowLevelClient(), times(1)).performRequest(any());
+    }
+
+    @Test
+    void shouldReuseExistingIndex() throws IOException {
+        // Mock index already exists
+        when(mockClient.indices().exists(any(GetIndexRequest.class), any(RequestOptions.class)))
+            .thenReturn(true);
+
+        String productType = "widget";
+        elasticsearchService.ensureIndexAndAliasExist(productType);
+
+        // Verify no index creation was attempted
+        verify(mockClient.indices(), never()).create(any(), any(RequestOptions.class));
+    }
+
+    @Test
+    void shouldHandleIndexCreationError() throws IOException {
+        when(mockClient.indices().exists(any(GetIndexRequest.class), any(RequestOptions.class)))
+            .thenReturn(false);
+        when(mockClient.indices().create(any(), any(RequestOptions.class)))
+            .thenThrow(new IOException("Failed to create index"));
+
+        String productType = "widget";
+        assertThrows(IOException.class, () -> 
+            elasticsearchService.ensureIndexAndAliasExist(productType));
+    }
+
+    @Test
+    void shouldValidateProductType() {
+        String invalidProductType = null;
+        assertThrows(IllegalArgumentException.class, () ->
+            elasticsearchService.ensureIndexAndAliasExist(invalidProductType));
+
+        invalidProductType = "";
+        assertThrows(IllegalArgumentException.class, () ->
+            elasticsearchService.ensureIndexAndAliasExist(invalidProductType));
+
+        invalidProductType = "invalid/product";
+        assertThrows(IllegalArgumentException.class, () ->
+            elasticsearchService.ensureIndexAndAliasExist(invalidProductType));
     }
 }

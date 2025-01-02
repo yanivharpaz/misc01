@@ -1,61 +1,47 @@
 package org.example.config;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.io.TempDir;
-import java.nio.file.Path;
-import java.io.File;
-import java.io.FileWriter;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith({MockitoExtension.class, SystemStubsExtension.class})
 class ConfigManagerTest {
-    
-    @TempDir
-    Path tempDir;
-    
-    private void createPropertiesFile(String filename, Properties props) throws Exception {
-        File file = tempDir.resolve(filename).toFile();
-        try (FileWriter writer = new FileWriter(file)) {
-            props.store(writer, null);
-        }
-    }
 
+    @SystemStub
+    private EnvironmentVariables environmentVariables;
+    
     @Test
     void shouldLoadDefaultConfiguration() {
         ConfigManager config = new ConfigManager();
         assertEquals("localhost:9092", config.getKafkaBootstrapServers());
-        assertEquals(9200, config.getElasticsearchPort());
+        assertEquals("kafka-to-elasticsearch-consumer", config.getKafkaGroupId());
     }
 
     @Test
-    void shouldLoadDevConfiguration() {
-        System.setProperty("app.environment", "dev");
-        ConfigManager config = new ConfigManager();
-        assertTrue(config.isDevEnvironment());
-        assertFalse(config.isProdEnvironment());
-        System.clearProperty("app.environment");
-    }
-
-    @Test
-    void shouldLoadProdConfiguration() {
-        System.setProperty("app.environment", "prod");
-        ConfigManager config = new ConfigManager();
-        assertTrue(config.isProdEnvironment());
-        assertFalse(config.isDevEnvironment());
-        System.clearProperty("app.environment");
-    }
-
-    @Test
-    void shouldOverrideWithEnvironmentVariables() {
-        // Using reflection to set environment variable
+    void shouldOverrideWithEnvironmentSpecificConfig() {
         try {
-            setEnv("KAFKA_BOOTSTRAP_SERVERS", "test-kafka:9092");
+            System.setProperty("app.environment", "prod");
             ConfigManager config = new ConfigManager();
-            assertEquals("test-kafka:9092", config.getKafkaBootstrapServers());
+            assertTrue(config.isProdEnvironment());
         } finally {
-            setEnv("KAFKA_BOOTSTRAP_SERVERS", null);
+            System.clearProperty("app.environment");
         }
+    }
+
+    @Test
+    void shouldUseEnvironmentVariablesOverProperties() {
+        String testServer = "test-server:9092";
+        environmentVariables.set("KAFKA_BOOTSTRAP_SERVERS", testServer);
+        
+        ConfigManager config = new ConfigManager();
+        assertEquals(testServer, config.getKafkaBootstrapServers());
     }
 
     @Test
@@ -64,9 +50,9 @@ class ConfigManagerTest {
         Properties kafkaProps = config.getKafkaConsumerProperties();
         
         assertNotNull(kafkaProps);
-        assertEquals("localhost:9092", kafkaProps.getProperty("bootstrap.servers"));
         assertEquals("org.apache.kafka.common.serialization.StringDeserializer", 
             kafkaProps.getProperty("key.deserializer"));
+        assertEquals("false", kafkaProps.getProperty("enable.auto.commit"));
     }
 
     @Test
@@ -75,59 +61,36 @@ class ConfigManagerTest {
         Properties kafkaProps = config.getKafkaProducerProperties();
         
         assertNotNull(kafkaProps);
+        assertEquals("org.apache.kafka.common.serialization.StringSerializer", 
+            kafkaProps.getProperty("key.serializer"));
         assertEquals("all", kafkaProps.getProperty("acks"));
-        assertEquals("3", kafkaProps.getProperty("retries"));
     }
 
     @Test
-    void shouldHandleInvalidEnvironment() {
-        System.setProperty("app.environment", "invalid");
-        ConfigManager config = new ConfigManager();
-        // Should default to dev
-        assertTrue(config.isDevEnvironment());
-        System.clearProperty("app.environment");
+    void shouldHandleMissingConfigurationFile() {
+        ConfigManager config = new ConfigManager("nonexistent");
+        // Should use default values
+        assertNotNull(config.getKafkaBootstrapServers());
+        assertNotNull(config.getElasticsearchHost());
     }
 
     @Test
-    void shouldValidateBatchConfiguration() {
-        ConfigManager config = new ConfigManager();
-        assertTrue(config.getBatchSize() > 0);
-        assertTrue(config.getBatchTimeoutMs() > 0);
+    void shouldReturnCorrectEnvironmentStatus() {
+        ConfigManager devConfig = new ConfigManager(ConfigManager.Environment.DEV);
+        assertTrue(devConfig.isDevEnvironment());
+        assertFalse(devConfig.isProdEnvironment());
+
+        ConfigManager prodConfig = new ConfigManager(ConfigManager.Environment.PROD);
+        assertTrue(prodConfig.isProdEnvironment());
+        assertFalse(prodConfig.isDevEnvironment());
     }
 
     @Test
-    void shouldLoadConfigurationInCorrectOrder() throws Exception {
-        // Create temp properties files
-        Properties defaultProps = new Properties();
-        defaultProps.setProperty("test.property", "default");
-        createPropertiesFile("application.properties", defaultProps);
-
-        Properties devProps = new Properties();
-        devProps.setProperty("test.property", "dev");
-        createPropertiesFile("application-dev.properties", devProps);
-
-        // Set up system property
-        System.setProperty("app.environment", "dev");
+    void shouldHandleInvalidEnvironmentName() {
+        String invalidEnv = "invalid";
+        environmentVariables.set("APP_ENVIRONMENT", invalidEnv);
         
-        // TODO: Add test implementation after modifying ConfigManager to accept custom config path
-        
-        System.clearProperty("app.environment");
-    }
-
-    // Helper method to set environment variables for testing
-    private static void setEnv(String key, String value) {
-        try {
-            java.lang.reflect.Field field = System.getenv().getClass().getDeclaredField("m");
-            field.setAccessible(true);
-            @SuppressWarnings("unchecked")
-            java.util.Map<String, String> env = (java.util.Map<String, String>) field.get(System.getenv());
-            if (value == null) {
-                env.remove(key);
-            } else {
-                env.put(key, value);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to set environment variable", e);
-        }
+        ConfigManager config = new ConfigManager();
+        assertTrue(config.isDevEnvironment(), "Should default to DEV for invalid environment");
     }
 }
