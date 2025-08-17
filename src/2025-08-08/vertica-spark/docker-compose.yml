@@ -1,0 +1,109 @@
+services:
+  vertica:
+    image: ${VERTICA_IMAGE}
+    platform: linux/amd64
+    container_name: vertica
+    ports:
+      - "${VERTICA_PORT}:5433"
+    shm_size: "${SHM_SIZE}"
+    ulimits:
+      nofile: ${NOFILE_ULIMIT}
+    volumes:
+      - vertica-data:/data
+    environment:
+      - APP_DB_NAME=${VERTICA_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "bash -lc 'vsql -U dbadmin -d ${VERTICA_DB} -c \"select 1\" >/dev/null 2>&1'"]
+      interval: 5s
+      timeout: 4s
+      retries: 60
+    restart: unless-stopped
+
+  vertica-jdbc-exporter:
+    image: ${VERTICA_IMAGE}
+    platform: linux/amd64
+    depends_on:
+      vertica:
+        condition: service_healthy
+    command: |
+      bash -lc '
+        set -e
+        mkdir -p /shared-jars
+        # copy any Vertica JDBC jar and also provide a stable alias
+        cp /opt/vertica/java/vertica-jdbc*.jar /shared-jars/ || { echo "JDBC jar not found"; exit 1; }
+        JAR_PATH=$(ls /shared-jars/vertica-jdbc*.jar | head -n1)
+        ln -sf "$(basename "$JAR_PATH")" /shared-jars/vertica-jdbc.jar
+        echo "Copied $(basename "$JAR_PATH") and created symlink vertica-jdbc.jar"
+      '
+    volumes:
+      - shared-jars:/shared-jars
+
+  vertica-connector-download:
+    image: curlimages/curl:8.8.0
+    user: "0"                # run as root so we can write the volume
+    depends_on:
+      vertica:
+        condition: service_started
+    entrypoint: /bin/sh
+    command: |
+      -lc '
+      if [ "${OFFLINE_JARS}" = "true" ]; then
+        echo "OFFLINE_JARS=true -> skipping download, expecting jars pre-mounted"
+        exit 0
+      fi
+      set -e
+      mkdir -p /shared-jars && chmod 777 /shared-jars
+      cd /shared-jars
+      echo "Downloading Vertica Spark connector 3.3.6..."
+      curl -fL -o vertica-spark-3.3.6.jar \
+        "https://repo1.maven.org/maven2/com/vertica/spark/vertica-spark/3.3.6/vertica-spark-3.3.6.jar"
+      echo "Downloaded vertica-spark-3.3.6.jar"
+      '
+    volumes:
+      - shared-jars:/shared-jars
+
+  vertica-init:
+    image: ${VERTICA_IMAGE}
+    platform: linux/amd64
+    depends_on:
+      vertica:
+        condition: service_healthy
+    volumes:
+      - ./init:/init:ro
+    environment:
+      - APP_USER=${APP_USER}
+      - APP_PASSWORD=${APP_PASSWORD}
+      - VERTICA_DB=${VERTICA_DB}
+    command: |
+      bash -lc '/init/init.sh'
+
+  spark:
+    image: ${SPARK_IMAGE}
+    platform: linux/amd64
+    container_name: spark
+    depends_on:
+      vertica:
+        condition: service_healthy
+      vertica-jdbc-exporter:
+        condition: service_started
+      vertica-connector-download:
+        condition: service_completed_successfully
+    ports:
+      - "${SPARK_NOTEBOOK_PORT}:8888"
+    environment:
+      - PYSPARK_SUBMIT_ARGS=--jars /opt/spark/jars-extra/vertica-spark-3.3.6.jar,/opt/spark/jars-extra/vertica-jdbc.jar pyspark-shell
+      - SPARK_CLASSPATH=/opt/spark/jars-extra/vertica-spark-3.3.6.jar:/opt/spark/jars-extra/vertica-jdbc.jar
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN}
+      - SPARK_LOCAL_IP=spark
+
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - shared-jars:/opt/spark/jars-extra:rw
+      - ./jars:/opt/spark/jars-extra-host:ro
+    command: |
+      start.sh jupyter lab --LabApp.token=${JUPYTER_TOKEN}
+    restart: unless-stopped
+
+volumes:
+  vertica-data:
+  shared-jars:
