@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+# Setup a GUI (XFCE/MATE/GNOME) + xrdp on Ubuntu server (AWS/Azure)
+# Default: bind xrdp to 127.0.0.1 (use SSH tunnel/Bastion). Use --public to expose 0.0.0.0:3389.
+set -Eeuo pipefail
+
+# Defaults (overridable via flags)
+DESKTOP_ENV="xfce"            # xfce | mate | gnome
+BIND_ADDRESS="127.0.0.1"      # 127.0.0.1 (safe) or 0.0.0.0
+CREATE_USER="desktop"         # GUI user to create (if missing)
+SET_PASSWORD=0                # 1 = set password for CREATE_USER
+USER_PASSWORD="${USER_PASSWORD:-}"   # Optional: provide via env
+DISABLE_SSH_PASSWORD_AUTH=0   # 1 = set PasswordAuthentication no
+INSTALL_SSM=0                 # 1 = install Amazon SSM agent (AWS)
+INSTALL_BROWSER=1             # 0 = skip Firefox
+
+log()  { echo "[+] $*"; }
+warn() { echo "[!] $*"; }
+err()  { echo "[X] $*"; exit 1; }
+
+usage() {
+cat <<'USAGE'
+Usage: setup-gui-rdp.sh [OPTIONS]
+
+Options:
+  --public                         Bind xrdp to 0.0.0.0 (expose RDP). Default is localhost only.
+  --localhost                      Bind xrdp to 127.0.0.1 (default).
+  --user <name>                    GUI login user (default: desktop).
+  --set-password                   Prompt (or use $USER_PASSWORD) to set password for the GUI user.
+  --env <xfce|mate|gnome>          Desktop environment (default: xfce).
+  --disable-ssh-password-auth      Set 'PasswordAuthentication no' in sshd_config.
+  --install-ssm                    Install Amazon SSM Agent (AWS).
+  --no-browser                     Skip installing Firefox.
+  --help                           Show this help.
+
+Examples:
+  setup-gui-rdp.sh --localhost
+  setup-gui-rdp.sh --public --user gui
+  USER_PASSWORD='S3cure1' setup-gui-rdp.sh --set-password
+USAGE
+}
+
+# Parse args
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --public) BIND_ADDRESS="0.0.0.0"; shift ;;
+    --localhost) BIND_ADDRESS="127.0.0.1"; shift ;;
+    --user) CREATE_USER="${2:-}"; shift 2 ;;
+    --set-password) SET_PASSWORD=1; shift ;;
+    --env) DESKTOP_ENV="${2:-}"; shift 2 ;;
+    --disable-ssh-password-auth) DISABLE_SSH_PASSWORD_AUTH=1; shift ;;
+    --install-ssm) INSTALL_SSM=1; shift ;;
+    --no-browser) INSTALL_BROWSER=0; shift ;;
+    --help|-h) usage; exit 0 ;;
+    *) err "Unknown option: $1. Use --help."; ;;
+  esac
+done
+
+[[ $EUID -eq 0 ]] || err "Run as root (sudo su)."
+if ! grep -qi ubuntu /etc/os-release; then warn "Not detected as Ubuntu. Proceeding anyway."; fi
+
+# Map DE to packages and session command
+DE_PACKAGES=()
+SESSION_CMD=""
+case "$DESKTOP_ENV" in
+  xfce)
+    DE_PACKAGES=(xfce4 xfce4-goodies)
+    SESSION_CMD="xfce4-session"
+    ;;
+  mate)
+    DE_PACKAGES=(mate-desktop-environment)
+    SESSION_CMD="mate-session"
+    ;;
+  gnome)
+    DE_PACKAGES=(ubuntu-desktop)   # heavy; consider ubuntu-desktop-minimal
+    SESSION_CMD="gnome-session --session=ubuntu"
+    ;;
+  *)
+    err "Unknown --env '$DESKTOP_ENV' (use xfce|mate|gnome)."
+    ;;
+esac
+
+log "Apt update and upgrade..."
+export DEBIAN_FRONTEND=noninteractive
+apt-get update -y
+apt-get upgrade -y
+
+log "Installing desktop environment: $DESKTOP_ENV"
+apt-get install -y "${DE_PACKAGES[@]}"
+
+log "Installing xrdp stack and helpers"
+apt-get install -y xrdp xorgxrdp dbus-x11 unzip
+if [[ $INSTALL_BROWSER -eq 1 ]]; then apt-get install -y firefox || true; fi
+
+# Create GUI user if needed
+if ! id -u "$CREATE_USER" >/dev/null 2>&1; then
+  log "Creating user '$CREATE_USER'"
+  adduser --disabled-password --gecos "Desktop User" "$CREATE_USER"
+else
+  log "User '$CREATE_USER' already exists"
+fi
+
+# Optionally set password
+if [[ $SET_PASSWORD -eq 1 ]]; then
+  if [[ -z "$USER_PASSWORD" ]]; then
+    if [[ -t 0 ]]; then
+      read -r -s -p "Enter password for user '$CREATE_USER': " USER_PASSWORD; echo
+    else
+      err "--set-password given but USER_PASSWORD not set and no TTY."
+    fi
+  fi
+  echo "$CREATE_USER:$USER_PASSWORD" | chpasswd
+  log "Password set for '$CREATE_USER'"
+fi
+
+# Make session default for all users
+log "Configuring default X session: $SESSION_CMD"
+printf "%s\n" "$SESSION_CMD" > /etc/skel/.xsession
+for u in "$CREATE_USER" ubuntu azureuser; do
+  if id -u "$u" >/dev/null 2>&1; then
+    printf "%s\n" "$SESSION_CMD" > "/home/$u/.xsession"
+    chown "$u:$u" "/home/$u/.xsession"
+    chmod 0644 "/home/$u/.xsession"
+  fi
+done
+
+# Polkit tweak to silence color profile prompts
+# Polkit rule (Ubuntu 22.04+): prefer modern JS rules; no legacy .pkla needed
+install -d -m 0755 /etc/polkit-1/rules.d
+cat >/etc/polkit-1/rules.d/45-allow-colord.rules <<'RULE'
+polkit.addRule(function(action, subject) {
+  if (action.id.indexOf("org.freedesktop.color-manager.") === 0) {
+    return polkit.Result.YES;
+  }
+});
+RULE
+
+# xrdp configuration
+log "Configuring xrdp to listen on $BIND_ADDRESS:3389"
+adduser xrdp ssl-cert || true
+sed -i 's/^#\?use_vsock=.*/use_vsock=false/' /etc/xrdp/xrdp.ini
+if grep -q '^address=' /etc/xrdp/xrdp.ini; then
+  sed -i "s/^address=.*/address=${BIND_ADDRESS}/" /etc/xrdp/xrdp.ini
+else
+  echo "address=${BIND_ADDRESS}" >> /etc/xrdp/xrdp.ini
+fi
+systemctl enable xrdp
+systemctl restart xrdp
+
+# Optional SSH hardening
+if [[ $DISABLE_SSH_PASSWORD_AUTH -eq 1 ]]; then
+  log "Disabling SSH password authentication"
+  sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+  systemctl reload sshd
+fi
+
+# Optional AWS SSM agent
+if [[ $INSTALL_SSM -eq 1 ]]; then
+  if command -v snap >/dev/null 2>&1; then
+    log "Installing Amazon SSM Agent via snap"
+    snap install amazon-ssm-agent --classic || true
+    systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent.service || true
+    systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service || true
+  else
+    warn "snap not available; skipping SSM Agent"
+  fi
+fi
+
+# Health check
+log "xrdp status (first lines):"
+systemctl --no-pager --full status xrdp | sed -n '1,15p' || true
+
+log "Listening sockets on 3389:"
+ss -ltnp | awk 'NR==1 || /:3389/' || true
+
+echo "DONE."
+if [[ "$BIND_ADDRESS" = "127.0.0.1" ]]; then
+cat <<'EOT'
+How to connect (localhost binding):
+1) Create an SSH tunnel from your client. Example (AWS):
+   ssh -L 3389:127.0.0.1:3389 ubuntu@<PUBLIC_OR_BASTION_IP>
+   (Use azureuser@<VM-IP> on Azure.)
+2) Open Remote Desktop Connection (mstsc) and connect to 127.0.0.1
+3) Log in as the GUI user (default: desktop). To set a password: sudo passwd desktop
+EOT
+else
+cat <<'EOT'
+Warning: RDP exposed on 0.0.0.0:3389.
+Restrict inbound via Security Group/NSG to your IP. Consider NLA, fail2ban, or a VPN/Bastion.
+To revert to localhost-only:
+  sudo sed -i 's/^address=.*/address=127.0.0.1/' /etc/xrdp/xrdp.ini
+  sudo systemctl restart xrdp
+EOT
+fi
+
