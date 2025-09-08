@@ -1,0 +1,16 @@
+# version: "3.9"
+
+services:
+  jupyter-spark:
+    image: jupyter/pyspark-notebook:latest
+    container_name: jupyter-spark
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data/input:/home/jovyan/work/input
+      - ./data/output:/home/jovyan/work/output
+      - ./data/output:/home/jovyan/work/stage
+      - ./notebooks:/home/jovyan/work/notebooks
+    environment:
+      - GRANT_SUDO=yes
+    command: start-notebook.sh --NotebookApp.token=''
