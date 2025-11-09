@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.box-wrapper {
+  position: relative; /* This is key for absolute positioning of badges */
+  display: inline-block;
+}
+
+.box {
+  background-color: #3b82f6; /* blue */
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 150px;
+  min-height: 100px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 4px;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  aspect-ratio: 1 / 1;
+}
+
+.badge-bottom {
+  position: absolute;
+  bottom: -12px; /* Half of badge height to overlap */
+  left: 50%;
+  transform: translateX(-50%); /* Center horizontally */
+  background-color: #f97316; /* orange */
+}
+
+.badge-top {
+  position: absolute;
+  top: -12px; /* Half of badge height to overlap */
+  right: -12px; /* Half of badge width to overlap */
+  background-color: #e53e3e; /* red */
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <!-- Box with both badges -->
+    <div class="box-wrapper">
+      <div class="box">
+        Box 1<br>With alert
+      </div>
+      <span class="badge badge-bottom">5</span>
+      <span class="badge badge-top">3</span>
+    </div>
+
+    <!-- Box with only bottom badge -->
+    <div class="box-wrapper">
+      <div class="box">
+        Box 2<br>No alert
+      </div>
+      <span class="badge badge-bottom">42</span>
+    </div>
+
+    <!-- Box with both badges -->
+    <div class="box-wrapper">
+      <div class="box">
+        Box 3<br>With alert
+      </div>
+      <span class="badge badge-bottom">999</span>
+      <span class="badge badge-top">12</span>
+    </div>
+  </div>
+</body>
+</html>
