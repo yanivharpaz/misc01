@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hive-oracle-etl-config
+  labels:
+    app.kubernetes.io/name: hive-oracle-etl
+data:
+  JOB_NAME: "hive_orders_to_oracle"
+  LOG_LEVEL: "INFO"
+  DRY_RUN: "false"
+
+  HIVE_HOST: "hiveserver2.example.com"
+  HIVE_PORT: "10000"
+  HIVE_DATABASE: "sales_dw"
+  HIVE_TABLE: "orders"
+  HIVE_AUTH: "LDAP"
+  HIVE_KERBEROS_SERVICE_NAME: "hive"
+  HIVE_CREATED_COLUMN: "created"
+  HIVE_SELECT_COLUMNS: "order_id,customer_id,amount,status,created"
+  HIVE_EXTRA_WHERE: ""
+  HIVE_CONFIGURATION_JSON: "{}"
+
+  ORACLE_DSN: "oracle19c.example.com:1521/ORCLPDB1"
+  ORACLE_TARGET_TABLE: "APP_ETL.ORDERS"
+  ORACLE_STAGE_TABLE: "APP_ETL.ORDERS_STG"
+  ORACLE_CONTROL_TABLE: "APP_ETL.ETL_WATERMARK"
+
+  TARGET_COLUMNS: "ORDER_ID,CUSTOMER_ID,AMOUNT,STATUS,CREATED"
+  KEY_COLUMNS: "ORDER_ID"
+  TARGET_CREATED_COLUMN: "CREATED"
+  COLUMN_RENAMES_JSON: "{}"
+  UPPERCASE_COLUMN_NAMES: "true"
+
+  INITIAL_WATERMARK: "1970-01-01T00:00:00+00:00"
+  LOOKBACK_MINUTES: "180"
+  SAFETY_LAG_MINUTES: "10"
+  CHUNK_SIZE: "50000"
+  INSERT_BATCH_SIZE: "10000"
+  ORACLE_STMT_CACHE_SIZE: "50"

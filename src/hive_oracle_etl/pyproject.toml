@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hive-oracle-etl"
+version = "0.1.0"
+description = "Incremental Hive to Oracle ETL using Python, pandas, and python-oracledb"
+requires-python = ">=3.11"
+readme = "README.md"
+authors = [{ name = "Data Engineering" }]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+hive-oracle-etl = "hive_oracle_etl.main:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

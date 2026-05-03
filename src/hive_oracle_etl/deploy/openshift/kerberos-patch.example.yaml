@@ -1,0 +1,38 @@
+# Optional example patch for Kerberos HiveServer2.
+# Apply only after creating:
+#   oc create configmap krb5-conf --from-file=krb5.conf=/path/to/krb5.conf
+#   oc create secret generic hive-keytab --from-file=hive.keytab=/path/to/hive.keytab
+#
+# Example usage:
+#   oc patch cronjob hive-oracle-etl --type merge --patch-file deploy/openshift/kerberos-patch.example.yaml
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: krb5-conf
+              configMap:
+                name: krb5-conf
+            - name: hive-keytab
+              secret:
+                secretName: hive-keytab
+                defaultMode: 0400
+          containers:
+            - name: hive-oracle-etl
+              command: ["/bin/sh", "-c"]
+              args:
+                - >-
+                  kinit -kt /etc/security/keytabs/hive.keytab "${HIVE_USERNAME}" &&
+                  exec python -m hive_oracle_etl.main
+              env:
+                - name: KRB5_CONFIG
+                  value: /etc/krb5.conf
+              volumeMounts:
+                - name: krb5-conf
+                  mountPath: /etc/krb5.conf
+                  subPath: krb5.conf
+                  readOnly: true
+                - name: hive-keytab
+                  mountPath: /etc/security/keytabs
+                  readOnly: true

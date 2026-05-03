@@ -1,0 +1,15 @@
+# Core data processing
+pandas>=2.2,<4
+python-dateutil>=2.9,<3
+
+# HiveServer2 access. For Kerberos/SASL clusters, keep the OS packages in Dockerfile.
+PyHive[hive_pure_sasl]>=0.7,<0.8
+thrift>=0.16,<1
+thrift-sasl>=0.4,<1
+pure-sasl>=0.6,<1
+
+# Oracle Database driver. Thin mode does not require Oracle Instant Client for Oracle 19c.
+oracledb>=2.4,<4
+
+# Operational helpers
+python-dotenv>=1.0,<2

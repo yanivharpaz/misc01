@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hive-oracle-etl
+  labels:
+    app.kubernetes.io/name: hive-oracle-etl
+spec:
+  schedule: "15 2 * * *"
+  # If your OpenShift/Kubernetes version supports CronJob timeZone, you can add:
+  # timeZone: "Asia/Jerusalem"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 7200
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: hive-oracle-etl
+        spec:
+          serviceAccountName: hive-oracle-etl-sa
+          restartPolicy: Never
+          containers:
+            - name: hive-oracle-etl
+              image: image-registry.openshift-image-registry.svc:5000/YOUR_PROJECT/hive-oracle-etl:0.1.0
+              imagePullPolicy: IfNotPresent
+              args: []
+              envFrom:
+                - configMapRef:
+                    name: hive-oracle-etl-config
+                - secretRef:
+                    name: hive-oracle-etl-secret
+              resources:
+                requests:
+                  cpu: "250m"
+                  memory: "512Mi"
+                limits:
+                  cpu: "1"
+                  memory: "2Gi"
+              securityContext:
+                allowPrivilegeEscalation: false
+                runAsNonRoot: true
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: RuntimeDefault
