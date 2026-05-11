@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Investment Podcasts and Transcripts for Private Opportunity Sourcing</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --fg:#1b1f23;
+      --muted:#5b6673;
+      --line:#d7dde5;
+      --soft:#f6f8fb;
+      --soft2:#eef3f8;
+      --accent:#1f5fbf;
+      --accent2:#0b7a75;
+      --warn:#9a6700;
+      --risk:#b42318;
+      --good:#027a48;
+      --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.10);
+      --radius:12px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--fg);
+      background:var(--bg);
+      line-height:1.56;
+    }
+    main{
+      max-width:1180px;
+      margin:0 auto;
+      padding:32px 20px 56px;
+    }
+    h1,h2,h3{
+      line-height:1.22;
+      color:#101828;
+      margin:0 0 12px;
+    }
+    h1{
+      font-size:2.1rem;
+      letter-spacing:-.02em;
+      margin-bottom:18px;
+    }
+    h2{
+      font-size:1.45rem;
+      margin-top:34px;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+    }
+    h3{
+      font-size:1.05rem;
+      margin-top:20px;
+    }
+    p{margin:12px 0}
+    .lede{
+      font-size:1.06rem;
+      color:#27303a;
+    }
+    .callout{
+      background:linear-gradient(180deg,#f8fbff,#f4f7fb);
+      border:1px solid #dbe7ff;
+      border-left:5px solid var(--accent);
+      border-radius:var(--radius);
+      padding:14px 16px;
+      margin:16px 0 18px;
+      box-shadow:var(--shadow);
+    }
+    .note{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    .warn{
+      color:var(--warn);
+      font-weight:600;
+    }
+    .risk{
+      color:var(--risk);
+      font-weight:600;
+    }
+    .good{
+      color:var(--good);
+      font-weight:600;
+    }
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+    .grid.two{grid-template-columns:1fr 1fr}
+    .grid.three{grid-template-columns:repeat(3,1fr)}
+    @media (max-width: 980px){
+      .grid.two,.grid.three{grid-template-columns:1fr}
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin:14px 0 18px;
+      font-size:.95rem;
+    }
+    th,td{
+      border:1px solid var(--line);
+      padding:10px 12px;
+      vertical-align:top;
+    }
+    th{
+      text-align:left;
+      background:var(--soft);
+      font-weight:700;
+    }
+    td.small, .small{font-size:.9rem}
+    .tight td,.tight th{padding:8px 10px}
+    .mono{font-family:var(--mono)}
+    .formula{
+      background:#0f172a;
+      color:#e2e8f0;
+      padding:14px 16px;
+      border-radius:12px;
+      overflow:auto;
+      font-family:var(--mono);
+      font-size:.94rem;
+      margin:14px 0;
+      box-shadow:var(--shadow);
+    }
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:16px;
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+    .subtle{
+      background:var(--soft);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px 16px;
+    }
+    .scenario{
+      background:linear-gradient(180deg,#fcfdff,#f7f9fc);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      margin:18px 0 22px;
+      box-shadow:var(--shadow);
+    }
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    @media (max-width: 980px){
+      .controls{grid-template-columns:1fr}
+    }
+    .control{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+    }
+    .control label{
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+    .range-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    input[type=range]{
+      width:100%;
+    }
+    output{
+      min-width:68px;
+      text-align:right;
+      font-family:var(--mono);
+      font-weight:700;
+      color:var(--accent);
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin:10px 0 16px;
+    }
+    @media (max-width: 980px){
+      .kpis{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width: 560px){
+      .kpis{grid-template-columns:1fr}
+    }
+    .kpi{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px 14px;
+    }
+    .kpi .value{
+      display:block;
+      font-size:1.3rem;
+      font-weight:800;
+      color:#101828;
+      margin-top:4px;
+    }
+    .chart{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+      background:#fff;
+    }
+    .barrow{
+      display:grid;
+      grid-template-columns:180px 1fr 72px;
+      align-items:center;
+      gap:10px;
+      margin:12px 0;
+    }
+    @media (max-width: 760px){
+      .barrow{grid-template-columns:1fr}
+    }
+    .bartrack{
+      height:18px;
+      background:var(--soft2);
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid #dbe3ec;
+    }
+    .barfill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+    }
+    .barvalue{
+      text-align:right;
+      font-family:var(--mono);
+      font-weight:700;
+    }
+    .cite{
+      font-size:.82em;
+      vertical-align:super;
+      line-height:0;
+      margin-left:2px;
+    }
+    .cite a{
+      color:var(--accent);
+      text-decoration:none;
+    }
+    .cite a:hover{text-decoration:underline}
+    .mermaid-wrap{
+      margin:16px 0 18px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .mermaid-wrap .label{
+      background:var(--soft);
+      color:#344054;
+      font-weight:700;
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+    }
+    pre.mermaid{
+      margin:0;
+      padding:14px 16px;
+      overflow:auto;
+      font-size:.92rem;
+      font-family:var(--mono);
+      background:#fff;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .foot{
+      color:var(--muted);
+      font-size:.92rem;
+      margin-top:10px;
+    }
+    .source-table td:nth-child(1),
+    .source-table th:nth-child(1){
+      width:76px;
+      white-space:nowrap;
+      font-family:var(--mono);
+      font-weight:700;
+    }
+    .source-table a{
+      color:var(--accent);
+      text-decoration:none;
+      word-break:break-word;
+    }
+    .source-table a:hover{text-decoration:underline}
+    .topnav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:0 0 18px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--soft);
+    }
+    .topnav a{
+      color:#344054;
+      text-decoration:none;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid transparent;
+      background:#fff;
+    }
+    .topnav a:hover{border-color:#c9d5e3}
+    .badge{
+      display:inline-block;
+      border:1px solid #b9c7db;
+      border-radius:999px;
+      padding:2px 8px;
+      font-size:.83rem;
+      background:#fff;
+      color:#344054;
+      margin-right:6px;
+    }
+    .noscript{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      color:#7c2d12;
+      border-radius:12px;
+      padding:12px 14px;
+      margin:12px 0 16px;
+    }
+    .print-only{display:none}
+    @media print{
+      .topnav{display:none}
+      .print-only{display:block}
+      body{background:#fff}
+      main{max-width:none;padding:18px}
+      .panel,.scenario,.chart,.subtle,.callout,.mermaid-wrap{box-shadow:none}
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Investment Podcasts and Their Transcripts as a Sourcing Engine for Private Opportunities and Early-Stage Recommendations</h1>
+
+  <nav class="topnav" aria-label="Section navigation">
+    <a href="#exec">Executive summary</a>
+    <a href="#scope">Scope and assumptions</a>
+    <a href="#collection">Data collection</a>
+    <a href="#nlp">NLP and search</a>
+    <a href="#workflow">Validation and workflow</a>
+    <a href="#compliance">Compliance</a>
+    <a href="#operations">Operations and implementation</a>
+    <a href="#sources">Sources</a>
+  </nav>
+
+
+
+  <section id="exec">
+    <h2>Executive summary</h2>
+    <p class="lede">Using investment podcasts and their transcripts to source private investment opportunities is <strong>feasible</strong>, but it works best as a <strong>weak-signal discovery and prioritization layer</strong>, not as a self-sufficient sourcing machine. The market structure of podcast transcripts has improved significantly: Apple Podcasts now auto-generates searchable transcripts for supported shows and lets creators provide VTT files and speaker names; Spotify allows creators to upload, edit, download, and distribute transcripts; YouTube exposes caption-track APIs; and the Podcasting 2.0 namespace provides a standardized <span class="mono">podcast:transcript</span> RSS tag for transcript files.<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s2">S2</a></sup><sup class="cite"><a href="#src-s3">S3</a></sup><sup class="cite"><a href="#src-s4">S4</a></sup></p>
+
+    <p>The core finding is that podcast-derived intelligence is strongest when it is used to answer three questions: <em>what company or founder is newly worth watching</em>, <em>what episode contained sufficiently specific investability or traction clues to justify validation</em>, and <em>which repeated recommendations or mentions are clustering across credible hosts and guests</em>. Mainstream investing and founder podcasts are generally <strong>research-rich but access-poor</strong>; niche online private-markets podcasts are often <strong>access-richer but narrower in coverage</strong>. In practice, that means a blended monitored universe is superior to a prestige-only list.<sup class="cite"><a href="#src-s26">S26</a></sup><sup class="cite"><a href="#src-s30">S30</a></sup></p>
+
+    <p>The technically sound design is to prioritize first-party transcripts from RSS, Apple Podcasts, Spotify, YouTube, and publisher pages; use ASR only as a fallback where rights and internal policy permit; segment transcripts by timestamp and speaker; extract companies, funds, people, tickers, recommendation language, and traction metrics; index those segments in a hybrid lexical-plus-vector system; and validate promising hits against SEC EDGAR, commercial company databases such as Crunchbase and PitchBook, and platform pages for live offerings.<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s2">S2</a></sup><sup class="cite"><a href="#src-s3">S3</a></sup><sup class="cite"><a href="#src-s19">S19</a></sup><sup class="cite"><a href="#src-s35">S35</a></sup><sup class="cite"><a href="#src-s36">S36</a></sup></p>
+
+    <div class="callout">
+      <p><strong>Bottom line.</strong> A well-run transcript pipeline can become a repeatable early-warning radar for founder traction disclosures, repeated investor endorsements, live or near-live platform opportunities, and thematic clusters. It should, however, feed a human research queue with compliance controls rather than automate investment decisions. The highest-return use is to <strong>reduce search cost and improve analyst prioritization</strong>, not to replace network sourcing, founder outreach, or diligence.</p>
+    </div>
+
+    <p>This report assumes a <strong>U.S.-first, multi-strategy early-stage research team</strong> because the user did not specify investor type, budget, or geographic scope. That assumption is explicit throughout, and it matters because U.S. public validation is materially easier through EDGAR and Regulation Crowdfunding filings than in many other jurisdictions.<sup class="cite"><a href="#src-s19">S19</a></sup><sup class="cite"><a href="#src-s20">S20</a></sup><sup class="cite"><a href="#src-s21">S21</a></sup></p>
+  </section>
+
+  <section id="scope">
+    <h2>Scope and assumptions</h2>
+    <p>The request left three variables unspecified: target investor type, budget, and geographic focus. To keep the report operationally coherent, the default frame is a U.S.-first research function for a multi-strategy early-stage team that covers venture-style sourcing, online private markets, and market-map construction from English-language podcast content. This framing is also consistent with the strongest primary-source validation regime available in public filings and the broadest current transcript support in the prioritized platforms.<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s19">S19</a></sup></p>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>Unspecified item</th>
+          <th>Default assumption used here</th>
+          <th>Why it matters analytically</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Target investor type</td>
+          <td>U.S.-first, multi-strategy early-stage research team</td>
+          <td>An angel, seed fund, retail private-market platform analyst, and public-market hedge fund all care about different signals. This report optimizes for private-company discovery plus recommendation tracking.</td>
+        </tr>
+        <tr>
+          <td>Budget</td>
+          <td>Lean pilot, then production if precision is acceptable</td>
+          <td>Raw STT and embeddings are inexpensive; subscriptions, analyst time, compliance review, and validation are not.<sup class="cite"><a href="#src-s6">S6</a></sup><sup class="cite"><a href="#src-s10">S10</a></sup><sup class="cite"><a href="#src-s11">S11</a></sup><sup class="cite"><a href="#src-s12">S12</a></sup><sup class="cite"><a href="#src-s13">S13</a></sup></td>
+        </tr>
+        <tr>
+          <td>Geographic focus</td>
+          <td>United States first, then English-speaking expansion</td>
+          <td>EDGAR and Regulation Crowdfunding provide a strong public validation layer for U.S. opportunities, and the requested materials prioritize English-language sources.<sup class="cite"><a href="#src-s19">S19</a></sup><sup class="cite"><a href="#src-s20">S20</a></sup></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Within this scope, the report distinguishes between <strong>research relevance</strong> and <strong>investable availability</strong>. An episode may be rich in category insight and founder detail but not tied to any actionable opportunity. Another may point directly to a live crowdfunding page or exempt offering. Those are different classes of signal and should be encoded differently in the data model, the lead score, and the analyst workflow.</p>
+  </section>
+
+  <section id="collection">
+    <h2>Data collection and transcript acquisition</h2>
+
+    <h3>Podcast selection criteria and prioritized source stack</h3>
+    <p>Podcast selection should be driven by <strong>expected signal density</strong>, not audience size. The strongest monitored shows combine transcript availability, founder or investor guest quality, a history of company-specific detail, visible sponsor disclosures, and a realistic chance that an episode will contain either direct investability cues or early operating signals. Apple Podcasts and Spotify matter not merely as listening destinations but as transcript infrastructure; YouTube matters because many business podcasts are also video shows; publisher pages matter because they often contain richer context and sometimes edited transcripts; and the RSS <span class="mono">podcast:transcript</span> tag is the cleanest rights-and-provenance path where present.<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s2">S2</a></sup><sup class="cite"><a href="#src-s3">S3</a></sup><sup class="cite"><a href="#src-s4">S4</a></sup></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Source</th>
+          <th>Why it is operationally attractive</th>
+          <th>Rights and provenance posture</th>
+          <th>Recommended use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Highest</td>
+          <td>RSS <span class="mono">podcast:transcript</span></td>
+          <td>Structured, creator-linked transcript resources with language and type metadata</td>
+          <td>Best provenance path because the creator or publisher exposes the transcript directly in feed metadata<sup class="cite"><a href="#src-s4">S4</a></sup></td>
+          <td>Primary ingestion whenever present</td>
+        </tr>
+        <tr>
+          <td>Highest</td>
+          <td>Apple Podcasts transcripts</td>
+          <td>Searchable, playback-synced, creator-correctable, and speaker-aware when VTT is supplied<sup class="cite"><a href="#src-s1">S1</a></sup></td>
+          <td>Good for internal analytics; outward quoting should remain conservative and attributed</td>
+          <td>Primary content and QA reference</td>
+        </tr>
+        <tr>
+          <td>High</td>
+          <td>Spotify transcripts</td>
+          <td>Creators can upload, edit, download, and distribute transcripts, including VTT and SRT support<sup class="cite"><a href="#src-s2">S2</a></sup></td>
+          <td>Good provenance where creators manage their files directly</td>
+          <td>Primary or co-primary ingestion</td>
+        </tr>
+        <tr>
+          <td>High</td>
+          <td>Publisher pages</td>
+          <td>Often add chaptering, bios, sponsor markers, and edited transcript sections</td>
+          <td>Usually the cleanest outward-facing citation source if a transcript page is public</td>
+          <td>Context enrichment and citation target</td>
+        </tr>
+        <tr>
+          <td>Medium</td>
+          <td>YouTube caption tracks</td>
+          <td>Official API support for listing and downloading caption tracks on video versions of podcasts<sup class="cite"><a href="#src-s3">S3</a></sup></td>
+          <td>Useful fallback; quality can vary depending on whether captions are manual or auto-generated</td>
+          <td>Fallback transcript source for video podcasts</td>
+        </tr>
+        <tr>
+          <td>Fallback</td>
+          <td>In-house ASR</td>
+          <td>Uniform schema and full control over timestamps, chunking, and downstream QA</td>
+          <td>Use only where internal policy permits transcription and storage of the underlying audio-derived text</td>
+          <td>Gap-filling and normalization</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Transcript acquisition methods and rights</h3>
+    <p>The recommended acquisition order is to take creator-linked RSS transcript files first, then native platform transcripts from Apple and Spotify, then publisher transcript pages, then official YouTube captions, and only after that use ASR as a fallback. This order improves provenance, generally improves speaker labels and entity spelling, and reduces the risk of indexing text that lacks a clear rights posture. Apple’s support documentation is explicit that transcripts can be creator-supplied, auto-generated, corrected, and copied by users only in limited form and with attribution; Spotify’s creator documentation is explicit that transcript files can be uploaded, edited, downloaded, and distributed via RSS.<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s2">S2</a></sup></p>
+
+    <p>The correct policy posture is to treat podcast transcripts as data for <strong>internal research use first</strong>, and to keep outward quotation, redistribution, or republishing narrow and compliance-reviewed. That is especially important because a transcript that is visible inside a listening app is not automatically a blank-check permission for broad republication. The safest practice is to store rights metadata next to every episode and every segment, with fields such as transcript source, rights class, quotation limit, and whether the stored text is creator-supplied, platform-generated, caption-derived, or in-house ASR.</p>
+
+    <h3>ASR fallback and accuracy measurement</h3>
+    <p>ASR fallback is operationally viable, but it should be benchmarked on your own corpus rather than trusted on vendor marketing alone. Podcast content is full of proper nouns, overlapping speech, cross-talk, sponsor reads, and startup names that are often absent from general lexicons. OpenAI documents speech-to-text models and structured extraction workflows; AssemblyAI documents sentence-level sentiment with time and speaker annotations; and the diarization literature is clear that speaker-attribution errors propagate into downstream tasks such as named-entity extraction and stance detection.<sup class="cite"><a href="#src-s7">S7</a></sup><sup class="cite"><a href="#src-s8">S8</a></sup><sup class="cite"><a href="#src-s9">S9</a></sup><sup class="cite"><a href="#src-s37">S37</a></sup></p>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>What it measures</th>
+          <th>Recommended internal acceptance band</th>
+          <th>Operational interpretation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="mono">WER</span></td>
+          <td>Word error rate on the text itself</td>
+          <td><span class="good">&le; 0.15 preferred</span>; <span class="warn">0.15–0.25 review</span>; <span class="risk">&gt; 0.25 high-risk for entity-heavy extraction</span></td>
+          <td>Use as the main gating metric for whether an episode can be trusted for recommendation detection without extra QA. This is a recommended operating threshold, not an industry-standard vendor benchmark.</td>
+        </tr>
+        <tr>
+          <td><span class="mono">DER</span></td>
+          <td>Diarization error rate for speaker segmentation and assignment</td>
+          <td><span class="good">&le; 0.10 preferred</span>; <span class="warn">0.10–0.20 review</span>; <span class="risk">&gt; 0.20 weak for speaker-specific claims</span></td>
+          <td>Critical when the difference between “host opinion,” “guest disclosure,” and “sponsor copy” changes the meaning of the segment.<sup class="cite"><a href="#src-s37">S37</a></sup></td>
+        </tr>
+        <tr>
+          <td><span class="mono">JER</span></td>
+          <td>Jaccard-style overlap error for diarization</td>
+          <td><span class="good">&le; 0.20 preferred</span>; <span class="warn">0.20–0.35 review</span>; <span class="risk">&gt; 0.35 weak speaker fidelity</span></td>
+          <td>Useful as a complementary speaker-overlap measure when multi-speaker podcasts have frequent interrupts or crosstalk.<sup class="cite"><a href="#src-s37">S37</a></sup></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="note">These WER, DER, and JER bands are recommended internal operating thresholds for investment-podcast workflows. They are not claimed here as official cross-vendor benchmarks. The most rigorous approach is to build a human-reviewed benchmark set of about 25 to 50 representative episodes across your monitored universe and score each acquisition path against the source transcript or a manually corrected reference.</p>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>Provider or path</th>
+          <th>Useful official evidence</th>
+          <th>Strength for this use case</th>
+          <th>Main caution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Apple creator or auto transcript</td>
+          <td>Searchable, playback-aligned transcripts; creator VTT can expose speakers<sup class="cite"><a href="#src-s1">S1</a></sup></td>
+          <td>Often the best practical quality-to-effort tradeoff</td>
+          <td>Coverage depends on show availability and supported languages</td>
+        </tr>
+        <tr>
+          <td>Spotify creator transcript</td>
+          <td>Transcript upload, editing, download, and RSS distribution support<sup class="cite"><a href="#src-s2">S2</a></sup></td>
+          <td>Strong provenance where enabled</td>
+          <td>Not all creators have the same features enabled</td>
+        </tr>
+        <tr>
+          <td>YouTube captions</td>
+          <td>Official captions API for listing and download<sup class="cite"><a href="#src-s3">S3</a></sup></td>
+          <td>Very useful for video-first podcasts</td>
+          <td>Caption quality and speaker labeling vary</td>
+        </tr>
+        <tr>
+          <td>OpenAI speech-to-text</td>
+          <td>Official speech-to-text guide and model documentation<sup class="cite"><a href="#src-s8">S8</a></sup></td>
+          <td>Good for internal normalization pipelines</td>
+          <td>Must be benchmarked on proper nouns and finance language</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="nlp">
+    <h2>NLP extraction and search architecture</h2>
+
+    <h3>Extraction targets</h3>
+    <p>The extraction layer should operate on timestamped transcript segments rather than whole episodes. A segment-centric design turns a ninety-minute audio file into a reviewable sequence of claims, mentions, and recommendation fragments. The minimum viable extraction set is named entities for companies, funds, people, products, tickers, and platforms; a recommendation taxonomy; timestamp retention; sentence-level sentiment and stance; speaker attribution; and PII screening before broad indexing.<sup class="cite"><a href="#src-s7">S7</a></sup><sup class="cite"><a href="#src-s9">S9</a></sup><sup class="cite"><a href="#src-s25">S25</a></sup></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Recommended method</th>
+          <th>Why it matters</th>
+          <th>Practical note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NER for companies, funds, people, tickers</td>
+          <td>General NER plus finance- and startup-specific dictionaries and alias maps</td>
+          <td>Generic NER misses startup spelling variants, funds, products, and symbols</td>
+          <td>Create explicit alias tables for portfolio company names, fund acronyms, host names, and common ASR confusions</td>
+        </tr>
+        <tr>
+          <td>Recommendation detection</td>
+          <td>Schema-constrained extraction through pattern rules plus structured LLM output<sup class="cite"><a href="#src-s7">S7</a></sup></td>
+          <td>“Positive sentiment” is not the same as an investable recommendation</td>
+          <td>Use a taxonomy that separates direct opportunities from generic enthusiasm</td>
+        </tr>
+        <tr>
+          <td>Timestamping</td>
+          <td>Preserve source timestamps at sentence or segment level</td>
+          <td>Analysts must be able to listen to the exact clip that generated the alert</td>
+          <td>Timestamp retention is also required for auditability and redactions</td>
+        </tr>
+        <tr>
+          <td>Sentence-level sentiment and stance</td>
+          <td>Sentence sentiment plus domain-specific stance classes<sup class="cite"><a href="#src-s9">S9</a></sup></td>
+          <td>Separates disclosed investment, caution, active raise, and general admiration</td>
+          <td>Generic positive or negative labels should not drive lead scoring on their own</td>
+        </tr>
+        <tr>
+          <td>Speaker attribution and diarization</td>
+          <td>Prefer publisher-supplied speaker names; otherwise diarize and monitor DER or JER<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s37">S37</a></sup></td>
+          <td>A segment spoken by a host, sponsor, guest founder, or portfolio investor has different evidentiary value</td>
+          <td>Store both machine speaker ID and normalized speaker role</td>
+        </tr>
+        <tr>
+          <td>PII detection and redaction</td>
+          <td>Run a PII pass before broad internal indexing<sup class="cite"><a href="#src-s25">S25</a></sup></td>
+          <td>Public speech can still contain personal addresses, emails, or other sensitive data</td>
+          <td>Mask by policy, not only by model confidence</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>A recommendation detector should classify language into a domain-specific taxonomy such as <em>active raise</em>, <em>platform-linked opportunity</em>, <em>disclosed existing investment</em>, <em>watchlist recommendation</em>, <em>traction evidence</em>, <em>category thesis</em>, <em>portfolio marketing</em>, <em>sponsor promotion</em>, and <em>non-investable context</em>. The point is not to make language grander than it is; the point is to avoid treating “we love this space” as equivalent to “the round is live on Wefunder through March 30.”<sup class="cite"><a href="#src-s31">S31</a></sup></p>
+
+    <h3>Hybrid lexical and vector search</h3>
+    <p>Pure vector retrieval is not enough for this problem because exact name matching is load-bearing. Many investment decisions hinge on getting a company name, fund name, ticker, or person match exactly right. The most robust architecture is therefore <strong>hybrid</strong>: exact or BM25-style lexical search for auditable name matching, paired with vector search for semantic recall across paraphrase and narrative similarity. Elastic explicitly positions hybrid retrieval as the combination of exact matching and semantic retrieval; Weaviate exposes hybrid search as a native pattern; Pinecone and Qdrant are strong vector-first systems with metadata filtering; and OpenAI embeddings are cheap enough at transcript scale that cost is seldom the binding constraint.<sup class="cite"><a href="#src-s5">S5</a></sup><sup class="cite"><a href="#src-s6">S6</a></sup><sup class="cite"><a href="#src-s14">S14</a></sup><sup class="cite"><a href="#src-s16">S16</a></sup><sup class="cite"><a href="#src-s17">S17</a></sup><sup class="cite"><a href="#src-s18">S18</a></sup></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Recommended posture</th>
+          <th>Why it fits this use case</th>
+          <th>Cost posture</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Embeddings</td>
+          <td>OpenAI <span class="mono">text-embedding-3-small</span> as default</td>
+          <td>Very low cost at transcript scale and sufficient for most semantic retrieval and clustering tasks<sup class="cite"><a href="#src-s5">S5</a></sup><sup class="cite"><a href="#src-s6">S6</a></sup></td>
+          <td>Official pricing is $0.02 per 1M input tokens.<sup class="cite"><a href="#src-s6">S6</a></sup></td>
+        </tr>
+        <tr>
+          <td>Pinecone</td>
+          <td>Managed vector store when fast setup and rich metadata filtering matter</td>
+          <td>Strong operational simplicity for pilots and good metadata filter support<sup class="cite"><a href="#src-s14">S14</a></sup></td>
+          <td>Public posture starts free; production costs vary by usage.<sup class="cite"><a href="#src-s15">S15</a></sup></td>
+        </tr>
+        <tr>
+          <td>Weaviate</td>
+          <td>Schema-rich hybrid retrieval if the team wants integrated search behavior</td>
+          <td>Good fit when vector search and hybrid search need to coexist with structured properties<sup class="cite"><a href="#src-s16">S16</a></sup></td>
+          <td>Verify current pricing during procurement; pricing is usage- and deployment-dependent.</td>
+        </tr>
+        <tr>
+          <td>Qdrant</td>
+          <td>Open-source or managed vector search where payload filtering changes the workflow</td>
+          <td>Appealing when you want high control and efficient metadata filtering<sup class="cite"><a href="#src-s17">S17</a></sup></td>
+          <td>Cloud pricing needs current verification; open-source self-hosting is viable.</td>
+        </tr>
+        <tr>
+          <td>Elasticsearch or OpenSearch family</td>
+          <td>Best default if exact-name recall, faceting, and auditability are primary</td>
+          <td>Hybrid lexical-plus-semantic retrieval is especially strong for company-name-heavy research<sup class="cite"><a href="#src-s18">S18</a></sup></td>
+          <td>Managed-cluster costs vary materially by node shape and replication.</td>
+        </tr>
+        <tr>
+          <td>pgvector</td>
+          <td>Leanest option when the team already runs PostgreSQL</td>
+          <td>Best for pilots that need low operational sprawl and modest scale</td>
+          <td>Usually the lowest friction at pilot scale, but exact economics depend on the Postgres host; this row is implementation guidance rather than a freshly re-verified vendor quote.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="note">OpenSearch is grouped here with Elasticsearch because the relevant design pattern is the same: hybrid lexical and vector retrieval over richly filtered metadata. Exact feature parity and current managed pricing should be re-verified at procurement. The pgvector row is included because it is a common practical choice for pilot systems, but exact current hosted costs were not independently re-checked in this report.</p>
+
+    <h3>Metadata schema</h3>
+    <p>The metadata model should be as important as the embeddings. Analysts and compliance staff will often search by provenance, rights, source credibility, or investability before they search by pure semantics.</p>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="mono">show_id</span>, <span class="mono">episode_id</span>, <span class="mono">episode_url</span>, <span class="mono">publish_ts</span></td><td>Traceability to the exact podcast asset and publication time</td></tr>
+        <tr><td><span class="mono">transcript_source</span>, <span class="mono">rights_class</span>, <span class="mono">language</span></td><td>Rights and provenance control for ingestion and quoting</td></tr>
+        <tr><td><span class="mono">segment_start_ms</span>, <span class="mono">segment_end_ms</span>, <span class="mono">segment_text</span></td><td>Reviewable retrieval unit with time anchors</td></tr>
+        <tr><td><span class="mono">speaker_id</span>, <span class="mono">speaker_name</span>, <span class="mono">speaker_role</span></td><td>Distinguishes host, guest founder, investor, sponsor, announcer, and unknown speaker</td></tr>
+        <tr><td><span class="mono">entities_people</span>, <span class="mono">entities_companies</span>, <span class="mono">entities_funds</span>, <span class="mono">tickers</span></td><td>Named-entity retrieval and de-duplication</td></tr>
+        <tr><td><span class="mono">recommendation_type</span>, <span class="mono">stance</span>, <span class="mono">sentiment</span>, <span class="mono">recommendation_confidence</span></td><td>Actionability and review prioritization</td></tr>
+        <tr><td><span class="mono">traction_metrics</span>, <span class="mono">fundraise_status</span>, <span class="mono">platform_name</span></td><td>Rules-based scoring and validation routing</td></tr>
+        <tr><td><span class="mono">validation_status</span>, <span class="mono">edgar_refs</span>, <span class="mono">crunchbase_refs</span>, <span class="mono">pitchbook_refs</span></td><td>Evidence bundle for diligence trail</td></tr>
+        <tr><td><span class="mono">bias_flags</span>, <span class="mono">sponsor_flag</span>, <span class="mono">portfolio_flag</span>, <span class="mono">pii_flag</span></td><td>Compliance and false-positive reduction</td></tr>
+      </tbody>
+    </table>
+
+    <div class="mermaid-wrap" aria-labelledby="pipeline-diagram-title">
+      <div class="label" id="pipeline-diagram-title">Mermaid pipeline source</div>
+      <pre class="mermaid">flowchart LR
+    A[Podcast discovery: Apple, Spotify, YouTube, publisher pages, RSS transcript tag]
+      --> B[Transcript acquisition: source ranking and rights capture]
+      --> C[Normalization: segmenting, timestamp retention, speaker identity]
+      --> D[Extraction: NER, recommendation taxonomy, sentiment, stance, metrics]
+      --> E[Hybrid index: lexical plus vector plus metadata]
+      --> F[Validation: EDGAR, Crunchbase, PitchBook, platform pages]
+      --> G[Lead scoring and analyst queue]
+      --> H[Compliance state, CRM sync, audit log]</pre>
+    </div>
+
+    <p class="note">The static interpretation of the pipeline is straightforward: collect with provenance first, normalize segments, extract structured signals, index them for search and alerting, validate externally, then route only the strongest leads into a human queue with compliance state attached.</p>
+  </section>
+
+  <section id="workflow">
+    <h2>Validation and early discovery workflow</h2>
+
+    <h3>Validation layers and false-positive control</h3>
+    <p>Validation separates narrative from evidence. A founder or investor may say something highly relevant on a podcast, but the system should not treat the statement as decision-ready until it is cross-referenced against public or licensed data sources. SEC EDGAR matters because it is public, machine-readable, and updated throughout the day; Regulation Crowdfunding matters because Form C filings and campaign materials can convert a podcast mention into a directly investable lead; Crunchbase and PitchBook matter because they provide commercial layers of company, deal, investor, and funding-round context; and platform pages matter because they often expose the practical details that turn a mention into an actionable review item.<sup class="cite"><a href="#src-s19">S19</a></sup><sup class="cite"><a href="#src-s20">S20</a></sup><sup class="cite"><a href="#src-s21">S21</a></sup><sup class="cite"><a href="#src-s35">S35</a></sup><sup class="cite"><a href="#src-s36">S36</a></sup></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Validation layer</th>
+          <th>What it confirms</th>
+          <th>Best use in the workflow</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SEC EDGAR APIs and filings</td>
+          <td>Public filing history, exempt-offering evidence, issuer names, dates, and filing artifacts<sup class="cite"><a href="#src-s19">S19</a></sup></td>
+          <td>Primary public confirmation for U.S. offerings and issuer existence</td>
+        </tr>
+        <tr>
+          <td>Regulation Crowdfunding and Form C</td>
+          <td>Whether an offering is live, recent, capped by rule, and disclosed through the prescribed form<sup class="cite"><a href="#src-s20">S20</a></sup><sup class="cite"><a href="#src-s21">S21</a></sup></td>
+          <td>Best public validation path for retail-accessible online startup offerings</td>
+        </tr>
+        <tr>
+          <td>Crunchbase</td>
+          <td>Company records, rounds, investors, and company-level enrichment<sup class="cite"><a href="#src-s35">S35</a></sup></td>
+          <td>Fast company-level enrichment and de-duplication</td>
+        </tr>
+        <tr>
+          <td>PitchBook</td>
+          <td>Deal, fund, investor, and people data through API-enabled workflows<sup class="cite"><a href="#src-s36">S36</a></sup></td>
+          <td>Institutional-grade enrichment for funding history and market context</td>
+        </tr>
+        <tr>
+          <td>Platform pages</td>
+          <td>Valuation, security type, minimums, campaign dates, and live-investability</td>
+          <td>Most important last-mile evidence for an actually actionable private-opportunity alert</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>False positives are predictable enough that they should be treated as a product design problem, not merely an analyst annoyance. Sponsor reads can look like endorsements. Investor-hosted podcasts can blur the line between thesis discussion and portfolio promotion. Retrospective founder stories can sound exciting while containing no investable path. Colossus show notes explicitly separate sponsors and timestamps, which is exactly the kind of markup a pipeline should learn to down-weight or exclude from lead scoring; a16z and KingsCrowd pages illustrate the opposite ends of the spectrum, from research-rich founder narrative to directly opportunity-adjacent content.<sup class="cite"><a href="#src-s33">S33</a></sup><sup class="cite"><a href="#src-s27">S27</a></sup><sup class="cite"><a href="#src-s31">S31</a></sup></p>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>False-positive source</th>
+          <th>Why it misleads the system</th>
+          <th>Recommended control</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Sponsor reads</td>
+          <td>Paid copy often uses recommendation-like language</td>
+          <td>Classify sponsor segments separately and apply a large bias penalty or hard exclusion</td>
+        </tr>
+        <tr>
+          <td>Portfolio promotion</td>
+          <td>Investor or host affinity can inflate perceived neutrality</td>
+          <td>Store disclosed relationship flags and score as biased-but-relevant rather than neutral</td>
+        </tr>
+        <tr>
+          <td>Retrospective founder stories</td>
+          <td>High narrative quality but no current investability</td>
+          <td>Down-weight unless fresh traction, fundraising, or platform-linked access appears</td>
+        </tr>
+        <tr>
+          <td>ASR spelling drift</td>
+          <td>Proper nouns, acronyms, and startup names are especially fragile</td>
+          <td>Maintain alias dictionaries and require validation before elevating a new company lead</td>
+        </tr>
+        <tr>
+          <td>Generic positivity</td>
+          <td>Positive tone is not the same as a recommendation</td>
+          <td>Use a recommendation taxonomy rather than sentiment alone</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Lead scoring, alerting, and cadence</h3>
+    <p>A practical lead score should privilege <strong>investability</strong> and <strong>freshness</strong> above generic positivity. The following formula is recommended as an initial policy model. Each component is normalized to a 0 to 1 range and the total is clipped to 0 to 100.</p>
+
+    <div class="formula">LeadScore = 25I + 20S + 20V + 15F + 10T + 5U + 5E − 10B
+
+I = investability
+S = source credibility
+V = validation depth
+F = freshness
+T = traction evidence
+U = uniqueness
+E = entity confidence
+B = bias penalty</div>
+
+    <p>This scoring scheme is intentionally asymmetric. A transcript segment tied to an active platform page or filing with modest narrative quality should often outrank a beautifully told founder story that lacks any practical path to action. For private opportunities, that asymmetry is a feature rather than a bug.</p>
+
+    <div class="scenario" aria-labelledby="scenario-title">
+      <h3 id="scenario-title">Interactive planning model</h3>
+      <p class="note">This client-side model is <strong>illustrative</strong>. It does not forecast returns or guarantee yield. It converts three policy inputs into planning estimates for cost, alert volume, and operating cadence so that a team can reason about scale before implementation.</p>
+
+      <noscript>
+        <div class="noscript">
+          JavaScript is disabled. The static fallback below assumes <strong>300 monitored hours per month</strong>, <strong>WER tolerance 0.18</strong>, and a <strong>lead-score threshold of 70</strong>. The visible bars, costs, and cadence text are still valid as a non-interactive reference.
+        </div>
+      </noscript>
+
+      <div class="controls">
+        <div class="control">
+          <label for="hoursRange">Monitored podcast volume</label>
+          <div class="range-row">
+            <input id="hoursRange" type="range" min="0" max="1000" step="10" value="300" aria-describedby="hoursHelp" />
+            <output id="hoursOut" for="hoursRange">300 h/mo</output>
+          </div>
+          <div id="hoursHelp" class="note">Illustrative total hours ingested across the monitored universe each month.</div>
+        </div>
+
+        <div class="control">
+          <label for="werRange">Transcription quality tolerance</label>
+          <div class="range-row">
+            <input id="werRange" type="range" min="0" max="1" step="0.01" value="0.18" aria-describedby="werHelp" />
+            <output id="werOut" for="werRange">0.18 WER</output>
+          </div>
+          <div id="werHelp" class="note">Maximum tolerated WER before the workflow forces additional review or de-prioritization.</div>
+        </div>
+
+        <div class="control">
+          <label for="thresholdRange">Lead-score threshold</label>
+          <div class="range-row">
+            <input id="thresholdRange" type="range" min="0" max="100" step="1" value="70" aria-describedby="thresholdHelp" />
+            <output id="thresholdOut" for="thresholdRange">70</output>
+          </div>
+          <div id="thresholdHelp" class="note">Higher thresholds reduce alert volume and usually improve precision, but may delay weak-signal discovery.</div>
+        </div>
+      </div>
+
+      <div class="kpis" aria-live="polite">
+        <div class="kpi">
+          <span class="note">Raw candidate mentions</span>
+          <span class="value" id="kpiRaw">45</span>
+        </div>
+        <div class="kpi">
+          <span class="note">Validated leads</span>
+          <span class="value" id="kpiValidated">23</span>
+        </div>
+        <div class="kpi">
+          <span class="note">Priority alerts</span>
+          <span class="value" id="kpiAlerts">7</span>
+        </div>
+        <div class="kpi">
+          <span class="note">Illustrative blended monthly spend</span>
+          <span class="value" id="kpiSpend">$1,813</span>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <div class="chart" aria-labelledby="yield-chart-title">
+          <h3 id="yield-chart-title">Expected signal-yield chart</h3>
+          <div class="barrow">
+            <div>Raw candidate mentions</div>
+            <div class="bartrack"><div class="barfill" id="barRaw" style="width:45%"></div></div>
+            <div class="barvalue" id="barRawVal">45</div>
+          </div>
+          <div class="barrow">
+            <div>Validated leads</div>
+            <div class="bartrack"><div class="barfill" id="barValidated" style="width:23%"></div></div>
+            <div class="barvalue" id="barValidatedVal">23</div>
+          </div>
+          <div class="barrow">
+            <div>Priority alerts</div>
+            <div class="bartrack"><div class="barfill" id="barAlerts" style="width:7%"></div></div>
+            <div class="barvalue" id="barAlertsVal">7</div>
+          </div>
+          <p class="foot">Illustrative assumptions: 0.24 raw recommendation-like candidates per monitored hour on a mixed podcast universe, 12,000 embedding tokens per hour, and a blended analyst/compliance review cost of $85 per hour.</p>
+        </div>
+
+        <div class="panel">
+          <h3>Alert cadence recommendation</h3>
+          <p id="cadenceText">Daily morning digest plus same-day review for any lead that clears the threshold with validation evidence attached. At the default settings, a single analyst can normally manage the queue without intra-day paging.</p>
+          <table class="tight">
+            <thead>
+              <tr>
+                <th>Planning input</th>
+                <th>Illustrative output</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Estimated analyst QA hours</td>
+                <td id="qaHoursCell">11.1 h/mo</td>
+              </tr>
+              <tr>
+                <td>Estimated validation review hours</td>
+                <td id="reviewHoursCell">6.9 h/mo</td>
+              </tr>
+              <tr>
+                <td>Estimated priority alerts per week</td>
+                <td id="alertsWeekCell">1.6</td>
+              </tr>
+              <tr>
+                <td>Indicative precision proxy</td>
+                <td id="precisionCell">50.8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>Illustrative monthly cost estimates by STT vendor</h3>
+      <table class="tight">
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th>Official public pricing signal</th>
+            <th>Illustrative STT cost at selected volume</th>
+            <th>Illustrative blended total with labor, embeddings, and hosting</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AssemblyAI</td>
+            <td>Pricing page headline equivalent to about $0.21 per hour in the example used here<sup class="cite"><a href="#src-s10">S10</a></sup></td>
+            <td id="costAssembly">$63</td>
+            <td id="totalAssembly">$1,813</td>
+          </tr>
+          <tr>
+            <td>Deepgram</td>
+            <td>Standard Nova headline equivalent to about $0.462 per hour in the example used here<sup class="cite"><a href="#src-s11">S11</a></sup></td>
+            <td id="costDeepgram">$139</td>
+            <td id="totalDeepgram">$1,889</td>
+          </tr>
+          <tr>
+            <td>Google Speech-to-Text</td>
+            <td>$0.016 per minute cited in Google’s V2 pricing announcement<sup class="cite"><a href="#src-s12">S12</a></sup></td>
+            <td id="costGoogle">$288</td>
+            <td id="totalGoogle">$2,038</td>
+          </tr>
+          <tr>
+            <td>AWS Transcribe</td>
+            <td>$0.024 per minute Tier 1 in US East as cited on AWS pricing<sup class="cite"><a href="#src-s13">S13</a></sup></td>
+            <td id="costAWS">$432</td>
+            <td id="totalAWS">$2,182</td>
+          </tr>
+          <tr>
+            <td>OpenAI embeddings</td>
+            <td>$0.02 per 1M input tokens for <span class="mono">text-embedding-3-small</span><sup class="cite"><a href="#src-s6">S6</a></sup></td>
+            <td id="costEmbed">$0.07</td>
+            <td>Included in blended totals</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>For operating cadence, the most important design choice is to separate <strong>real-time urgency</strong> from <strong>daily analyst sanity</strong>. Same-hour alerting is useful only for the narrow subset of cases where a transcript segment looks like a direct, time-sensitive opportunity. Most of the monitored universe is better handled through a daily digest plus an evidence bundle, with a weekly analyst or IC review for repeated mentions and score changes.</p>
+  </section>
+
+  <section id="compliance">
+    <h2>Legal, ethical, and compliance controls</h2>
+
+    <h3>Copyright, transcript rights, and internal-use boundaries</h3>
+    <p>Transcript rights should be treated as a first-class control. Apple positions transcripts primarily as an accessibility and listening feature, allows creators to upload or correct them, and limits user copying to short extracts with attribution; Spotify lets creators manage transcript files in standard subtitle formats and distribute them via RSS.<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s2">S2</a></sup> The operative policy implication is that a research team should prefer first-party transcript sources, maintain a rights class for every episode and segment, and constrain outward sharing of transcript text to short, attributed, policy-reviewed excerpts. In other words, use transcripts broadly for internal indexing and narrow them sharply for external redistribution.</p>
+
+    <h3>Insider trading, public information, and MNPI controls</h3>
+    <p>Podcast content is usually public speech, but compliance still matters because the presence of a statement in a podcast does not automatically settle whether the statement is material, fully disseminated, or safe to act on in every context. The SEC’s 10b5-1 and related disclosure guidance is the relevant baseline for trading-policy design, and teams should escalate any segment that appears material and unusually specific before acting on it.<sup class="cite"><a href="#src-s22">S22</a></sup> The defensible operating model is to attach a <strong>compliance state</strong> to every lead, with labels such as <em>public</em>, <em>public but sensitive</em>, <em>ambiguous dissemination</em>, and <em>restricted pending review</em>.</p>
+
+    <h3>Fiduciary duty and research-process integrity</h3>
+    <p>If the end user is an investment adviser, the SEC’s fiduciary-duty interpretation is clear that the duty comprises both care and loyalty.<sup class="cite"><a href="#src-s23">S23</a></sup> In this context that means podcast-derived signals cannot be treated as self-validating facts. Every material lead should carry provenance, bias flags, a clear distinction between the quoted statement and the validated evidence, and a record of why it was escalated. This is especially important for investor-hosted or sponsor-heavy podcasts because incentives can color both topic selection and narrative framing.</p>
+
+    <h3>Privacy and GDPR</h3>
+    <p>Even publicly available audio can include personal data. The European Commission’s guidance frames data protection as a fundamental right under the GDPR framework, and that matters whenever a firm stores, enriches, shares, or centrally indexes speech-derived personal data at scale.<sup class="cite"><a href="#src-s24">S24</a></sup> A production system should therefore perform PII detection and redaction before broad internal indexing, cap transcript retention where appropriate, and control access by role. Microsoft Presidio is one practical open-source option for the detection and anonymization layer.<sup class="cite"><a href="#src-s25">S25</a></sup></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Risk area</th>
+          <th>Why it matters here</th>
+          <th>Recommended control</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Copyright and transcript reuse</td>
+          <td>Transcripts are accessible but not automatically free for broad republication</td>
+          <td>Store rights class, favor first-party sources, and limit outward quoting to short attributed extracts</td>
+        </tr>
+        <tr>
+          <td>MNPI and trading policy</td>
+          <td>A public podcast can still contain statements that feel material or ambiguously disseminated</td>
+          <td>Attach compliance states, require review for sensitive segments, and log decisions</td>
+        </tr>
+        <tr>
+          <td>Fiduciary duty</td>
+          <td>Research quality and conflict management are legal as well as operational issues</td>
+          <td>Separate transcript claim from validated evidence and preserve an audit trail</td>
+        </tr>
+        <tr>
+          <td>Privacy</td>
+          <td>Speech often contains direct or indirect personal data</td>
+          <td>PII detection, role-based access, retention controls, and redaction before broad indexing</td>
+        </tr>
+        <tr>
+          <td>Sponsor and portfolio bias</td>
+          <td>Promotion can look like impartial research</td>
+          <td>Automate sponsor and relationship flags and apply lead-score penalties</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="operations">
+    <h2>Operations, economics, and implementation</h2>
+
+    <h3>Team roles, infrastructure, and latency</h3>
+    <p>A lean pilot can be run by one data or ML engineer and one research analyst with compliance support on call. A durable production function usually needs four capabilities covered: data engineering, extraction and search engineering, analyst triage, and legal or compliance oversight. The reason is simple: the marginal cost of compute is low, but the cost of false positives, poor rights handling, or ambiguous public-information handling falls on people and process, not on infrastructure.</p>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Primary responsibility</th>
+          <th>When it becomes essential</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Data or ML engineer</td>
+          <td>Collection, parsing, normalization, extraction, indexing, and alerting pipeline</td>
+          <td>Immediately, even for a pilot</td>
+        </tr>
+        <tr>
+          <td>Research analyst</td>
+          <td>Lead triage, validation, watchlists, and handoff into diligence or CRM</td>
+          <td>Immediately, because the signal is not self-validating</td>
+        </tr>
+        <tr>
+          <td>Compliance or legal reviewer</td>
+          <td>Rights classification, MNPI policy, quote policy, and evidence standards</td>
+          <td>Before broader rollout or any trading integration</td>
+        </tr>
+        <tr>
+          <td>Platform or infra owner</td>
+          <td>Monitoring, storage policy, retention, and search uptime</td>
+          <td>At production scale</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Latency should be designed around <strong>same-day usefulness</strong>, not imaginary real-time perfection. Apple says episodes are available for listening immediately and transcripts appear shortly afterward; YouTube caption tracks are accessible through the official captions API; and creator-supplied RSS transcripts can arrive without waiting for third-party ASR.<sup class="cite"><a href="#src-s1">S1</a></sup><sup class="cite"><a href="#src-s3">S3</a></sup><sup class="cite"><a href="#src-s4">S4</a></sup> For most research teams, a practical SLA is sub-day ingestion and a daily alert digest, with same-hour escalation only for high-score, platform-validated opportunities.</p>
+
+    <h3>Economics and tool comparisons</h3>
+    <p>At transcript scale, storage and embeddings are cheap; analyst time and validation subscriptions are not. OpenAI’s official pricing makes embeddings almost negligible in a 300-hour monthly example, while official STT pricing across AssemblyAI, Deepgram, Google, and AWS still stays modest compared with labor. That asymmetry is the main reason to keep the system tightly focused on prioritization value rather than collecting every possible show.<sup class="cite"><a href="#src-s6">S6</a></sup><sup class="cite"><a href="#src-s10">S10</a></sup><sup class="cite"><a href="#src-s11">S11</a></sup><sup class="cite"><a href="#src-s12">S12</a></sup><sup class="cite"><a href="#src-s13">S13</a></sup></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Search or storage option</th>
+          <th>When it is the best fit</th>
+          <th>Operational tradeoff</th>
+          <th>Cost posture for a pilot</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pinecone + OpenAI embeddings</td>
+          <td>Fastest managed vector pilot with metadata-rich filtering</td>
+          <td>Great time-to-first-result, but adds a dedicated vector vendor<sup class="cite"><a href="#src-s14">S14</a></sup><sup class="cite"><a href="#src-s15">S15</a></sup></td>
+          <td>Public starts-free posture for Pinecone; production cost varies by scale and index shape</td>
+        </tr>
+        <tr>
+          <td>Weaviate + OpenAI embeddings</td>
+          <td>Teams that want integrated hybrid search behavior and schema-driven development</td>
+          <td>Good abstraction, but pricing must be checked against deployment choices<sup class="cite"><a href="#src-s16">S16</a></sup></td>
+          <td>Likely low hundreds monthly in small managed setups, but verify at procurement</td>
+        </tr>
+        <tr>
+          <td>Qdrant + OpenAI embeddings</td>
+          <td>Open-source control with strong filtering and a clear upgrade path</td>
+          <td>Operationally attractive if the team can self-host or wants cloud flexibility<sup class="cite"><a href="#src-s17">S17</a></sup></td>
+          <td>Can be very economical if self-hosted; cloud costs vary</td>
+        </tr>
+        <tr>
+          <td>Elasticsearch or OpenSearch family + OpenAI embeddings</td>
+          <td>Name-heavy workloads requiring exact filterability and auditability</td>
+          <td>Most flexible for lexical-plus-semantic search; also the heaviest operational surface<sup class="cite"><a href="#src-s18">S18</a></sup></td>
+          <td>Usually the most ops-intensive managed option at pilot scale</td>
+        </tr>
+        <tr>
+          <td>PostgreSQL + pgvector + lexical tables</td>
+          <td>Best when the team already runs Postgres and wants low sprawl</td>
+          <td>Excellent for small pilots, but dedicated search ergonomics may lag at scale</td>
+          <td>Often the cheapest pilot path because it rides the existing database footprint</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Case studies and sample records</h3>
+    <p>Real podcast examples show why the monitored universe should be mixed. a16z is powerful for founder context and category thesis; KingsCrowd is powerful for direct online private-market relevance. On a16z, the Pilot and Mercury “My First 16” pages surface founder-origin details that are rich for market maps and early operating understanding. On KingsCrowd, the Cleveland Whiskey episode page goes much further and ties the narrative to an active Wefunder opportunity with valuation, security type, and campaign timing. The Health Care Originals episode page similarly surfaces traction assertions that are strong enough to justify a validation workflow.<sup class="cite"><a href="#src-s27">S27</a></sup><sup class="cite"><a href="#src-s28">S28</a></sup><sup class="cite"><a href="#src-s31">S31</a></sup><sup class="cite"><a href="#src-s32">S32</a></sup></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Transcript-derived or page-derived signal</th>
+          <th>Why it matters</th>
+          <th>Illustrative pipeline classification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>a16z / Pilot</td>
+          <td>Founder describes bookkeeping, tax, and CFO pain as the origin problem for Pilot.<sup class="cite"><a href="#src-s27">S27</a></sup></td>
+          <td>Good for category and founder-reasoning extraction; limited direct investability from the episode itself</td>
+          <td><span class="badge">Category thesis</span><span class="badge">Founder origin</span><span class="badge">Research queue</span></td>
+        </tr>
+        <tr>
+          <td>a16z / Mercury</td>
+          <td>Founder frames the timing gap between what startup software improved and what banking had not fixed.<sup class="cite"><a href="#src-s28">S28</a></sup></td>
+          <td>Good early-stage recommendation proxy when repeated across credible investors and founders</td>
+          <td><span class="badge">Watchlist</span><span class="badge">Thematic cluster</span></td>
+        </tr>
+        <tr>
+          <td>a16z / Mintlify</td>
+          <td>Episode centers on why documentation for coding agents mattered and how the founders iterated through multiple pivots.<sup class="cite"><a href="#src-s29">S29</a></sup></td>
+          <td>Good example of early narrative signal from a founder-focused show</td>
+          <td><span class="badge">Narrative lead</span><span class="badge">AI tooling map</span></td>
+        </tr>
+        <tr>
+          <td>KingsCrowd / Cleveland Whiskey</td>
+          <td>Episode page ties company narrative to a Wefunder raise and includes valuation, common equity, and campaign dates.<sup class="cite"><a href="#src-s31">S31</a></sup></td>
+          <td>Nearly ideal direct-opportunity pattern for a private-opportunity alert</td>
+          <td><span class="badge">Active raise</span><span class="badge">Platform-linked</span><span class="badge">High priority</span></td>
+        </tr>
+        <tr>
+          <td>KingsCrowd / Health Care Originals</td>
+          <td>Episode page states independently validated results, $5.8M in ARR contracts, and a 12,000+ patient waitlist.<sup class="cite"><a href="#src-s32">S32</a></sup></td>
+          <td>Strong traction signal that should trigger validation against platform materials and other evidence</td>
+          <td><span class="badge">Traction claim</span><span class="badge">Due-diligence queue</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>Mock structured record</th>
+          <th>Illustrative values</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="mono">show_id</span>, <span class="mono">episode_id</span></td>
+          <td><span class="mono">kingscrowd</span>, <span class="mono">episode_160</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">segment_text</span></td>
+          <td>“…the deal is live on Wefunder, common equity, campaign runs through March 30…”</td>
+        </tr>
+        <tr>
+          <td><span class="mono">entities_companies</span></td>
+          <td><span class="mono">["Cleveland Whiskey"]</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">platform_name</span></td>
+          <td><span class="mono">Wefunder</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">recommendation_type</span></td>
+          <td><span class="mono">active_raise</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">traction_metrics</span></td>
+          <td><span class="mono">["India JV", "first order"]</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">validation_status</span></td>
+          <td><span class="mono">platform_page_confirmed</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">bias_flags</span></td>
+          <td><span class="mono">[]</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">lead_score</span></td>
+          <td><span class="mono">86</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="tight">
+      <thead>
+        <tr>
+          <th>Mock analyst queue output</th>
+          <th>What the system should show</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>High-priority alert</td>
+          <td>Cleveland Whiskey — active platform-linked raise with valuation and timing visible on source page; route for same-day analyst review.<sup class="cite"><a href="#src-s31">S31</a></sup></td>
+        </tr>
+        <tr>
+          <td>Research lead</td>
+          <td>Mintlify — strong founder and category signal in AI tooling but no direct investability cue on the source page; add to market map and recurring-mention watchlist.<sup class="cite"><a href="#src-s29">S29</a></sup></td>
+        </tr>
+        <tr>
+          <td>Diligence lead</td>
+          <td>Health Care Originals — traction claims justify follow-up against platform disclosures, customer proofs, and any searchable public records.<sup class="cite"><a href="#src-s32">S32</a></sup></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Implementation path and recommendations</h3>
+    <p>The strongest recommendation is to build a <strong>twelve-week pilot</strong> around a tightly curated monitored universe, first-party transcript provenance, hybrid search, and an analyst validation queue. Do not begin with a broad internet scrape. Begin with a list of perhaps 25 to 50 shows and the highest-confidence sources for each one. The second recommendation is to make the product objective explicit: if the goal is direct private-opportunity discovery, weight niche private-market shows more heavily; if the goal is early recommendations and market maps, include more founder and investor interview shows. The third recommendation is to keep compliance state and bias flags inside the core schema from the start, not as an afterthought.</p>
+
+    <div class="mermaid-wrap" aria-labelledby="timeline-diagram-title">
+      <div class="label" id="timeline-diagram-title">Mermaid implementation timeline source</div>
+      <pre class="mermaid">gantt
+    title Pilot program timeline
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+
+    section Governance
+    Rights policy and compliance states      :a1, 2026-05-18, 2026-05-29
+
+    section Collection
+    Show universe and source registry        :a2, 2026-05-18, 2026-05-29
+    RSS Apple Spotify YouTube collectors     :a3, 2026-05-25, 2026-06-12
+
+    section Extraction
+    Segmentation and speaker pipeline        :a4, 2026-06-01, 2026-06-19
+    NER and recommendation taxonomy          :a5, 2026-06-08, 2026-06-26
+
+    section Validation
+    EDGAR and commercial data connectors     :a6, 2026-06-15, 2026-07-03
+    Lead score and analyst queue             :a7, 2026-06-29, 2026-07-17
+
+    section Operations
+    Tuning, QA, and pilot review             :a8, 2026-07-13, 2026-08-07</pre>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Pilot phase</th>
+          <th>What to do</th>
+          <th>Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Governance and rights</td>
+          <td>Define the monitored-show list, rights classes, quoting rules, retention policy, and compliance states</td>
+          <td>Signed-off policy and source registry</td>
+        </tr>
+        <tr>
+          <td>Collection</td>
+          <td>Build source adapters for RSS transcript tags, Apple, Spotify, YouTube, and publisher pages</td>
+          <td>Transcript warehouse with provenance metadata</td>
+        </tr>
+        <tr>
+          <td>Extraction</td>
+          <td>Normalize into timestamped segments, enrich speakers, detect entities and recommendation taxonomy</td>
+          <td>Structured segment records and confidence scores</td>
+        </tr>
+        <tr>
+          <td>Search and alerting</td>
+          <td>Stand up hybrid search, metadata filters, per-show saved queries, and score-threshold alerts</td>
+          <td>Analyst-facing search and alert surfaces</td>
+        </tr>
+        <tr>
+          <td>Validation</td>
+          <td>Connect EDGAR and commercial company datasets; attach evidence bundles to candidate leads</td>
+          <td>Validated queue with less analyst hunting</td>
+        </tr>
+        <tr>
+          <td>Tuning and review</td>
+          <td>Measure precision, sponsor contamination, source quality, and analyst time saved</td>
+          <td>Go or no-go decision for production</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>The best risk-mitigation package is surprisingly simple. Keep the monitored universe narrow until precision is understood. Prefer transcript sources with clear provenance. Down-weight sponsor and disclosed-relationship segments. Require validation evidence before escalation above a set score. Keep all alerts tied to exact timestamps and source URLs. Treat privacy and rights metadata as part of the primary key, not just a compliance memo. The technical implementation is manageable; the long-run value depends on disciplined use.</p>
+  </section>
+
+  <section id="sources">
+    <h2>Sources</h2>
+    <p class="note">The report prioritizes primary and official sources where available, supplemented by a recent diarization-survey source for the DER and JER metric discussion. Inline references use source IDs such as <span class="mono">S1</span>.</p>
+
+    <table class="source-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Source</th>
+          <th>Why cited</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="src-s1">
+          <td>S1</td>
+          <td><a href="https://podcasters.apple.com/support/5316-transcripts-on-apple-podcasts" target="_blank" rel="noopener">Apple Podcasts for Creators — Transcripts on Apple Podcasts</a></td>
+          <td>Apple transcript availability, searchability, creator-provided VTT, speaker names, correction workflow, and copy/attribution behavior.</td>
+        </tr>
+        <tr id="src-s2">
+          <td>S2</td>
+          <td><a href="https://support.spotify.com/us/creators/article/managing-episode-transcripts-on-spotify/" target="_blank" rel="noopener">Spotify for Creators — Managing episode transcripts on Spotify</a></td>
+          <td>Spotify transcript upload, editing, download, file formats, and RSS distribution behavior.</td>
+        </tr>
+        <tr id="src-s3">
+          <td>S3</td>
+          <td><a href="https://developers.google.com/youtube/v3/docs/captions" target="_blank" rel="noopener">YouTube Data API — Captions</a></td>
+          <td>Official caption-track API support for video podcasts.</td>
+        </tr>
+        <tr id="src-s4">
+          <td>S4</td>
+          <td><a href="https://podcasting2.org/docs/podcast-namespace/tags/transcript" target="_blank" rel="noopener">Podcasting 2.0 Namespace — transcript tag</a></td>
+          <td>Standard RSS transcript linking through <span class="mono">podcast:transcript</span>.</td>
+        </tr>
+        <tr id="src-s5">
+          <td>S5</td>
+          <td><a href="https://platform.openai.com/docs/guides/embeddings" target="_blank" rel="noopener">OpenAI — Embeddings guide</a></td>
+          <td>Embedding usage patterns and operational role in retrieval.</td>
+        </tr>
+        <tr id="src-s6">
+          <td>S6</td>
+          <td><a href="https://openai.com/api/pricing/" target="_blank" rel="noopener">OpenAI — API pricing</a></td>
+          <td>Official pricing reference for embeddings used in the illustrative cost model.</td>
+        </tr>
+        <tr id="src-s7">
+          <td>S7</td>
+          <td><a href="https://platform.openai.com/docs/guides/structured-outputs" target="_blank" rel="noopener">OpenAI — Structured outputs</a></td>
+          <td>Schema-constrained extraction for recommendation detection and record construction.</td>
+        </tr>
+        <tr id="src-s8">
+          <td>S8</td>
+          <td><a href="https://platform.openai.com/docs/guides/speech-to-text" target="_blank" rel="noopener">OpenAI — Speech to text guide</a></td>
+          <td>Official speech-to-text documentation for ASR fallback design.</td>
+        </tr>
+        <tr id="src-s9">
+          <td>S9</td>
+          <td><a href="https://www.assemblyai.com/docs/speech-understanding/analyze-sentiment-of-speech" target="_blank" rel="noopener">AssemblyAI — Analyze sentiment of speech</a></td>
+          <td>Sentence-level sentiment with timestamps and speaker fields.</td>
+        </tr>
+        <tr id="src-s10">
+          <td>S10</td>
+          <td><a href="https://www.assemblyai.com/pricing" target="_blank" rel="noopener">AssemblyAI — Pricing</a></td>
+          <td>Illustrative STT cost comparison.</td>
+        </tr>
+        <tr id="src-s11">
+          <td>S11</td>
+          <td><a href="https://deepgram.com/pricing" target="_blank" rel="noopener">Deepgram — Pricing</a></td>
+          <td>Illustrative STT cost comparison.</td>
+        </tr>
+        <tr id="src-s12">
+          <td>S12</td>
+          <td><a href="https://cloud.google.com/blog/products/ai-machine-learning/google-cloud-speech-to-text-v2-api/" target="_blank" rel="noopener">Google Cloud Blog — Speech-to-Text V2 API pricing update</a></td>
+          <td>Official Google pricing signal used in the 300-hours example.</td>
+        </tr>
+        <tr id="src-s13">
+          <td>S13</td>
+          <td><a href="https://aws.amazon.com/transcribe/pricing/" target="_blank" rel="noopener">AWS — Amazon Transcribe pricing</a></td>
+          <td>Official AWS STT pricing signal used in the comparison table.</td>
+        </tr>
+        <tr id="src-s14">
+          <td>S14</td>
+          <td><a href="https://docs.pinecone.io/guides/search/filter-by-metadata" target="_blank" rel="noopener">Pinecone — Filter by metadata</a></td>
+          <td>Metadata-rich vector retrieval.</td>
+        </tr>
+        <tr id="src-s15">
+          <td>S15</td>
+          <td><a href="https://www.pinecone.io/pricing/" target="_blank" rel="noopener">Pinecone — Pricing</a></td>
+          <td>Public pricing posture for managed vector infrastructure.</td>
+        </tr>
+        <tr id="src-s16">
+          <td>S16</td>
+          <td><a href="https://docs.weaviate.io/weaviate/search/hybrid" target="_blank" rel="noopener">Weaviate — Hybrid search</a></td>
+          <td>Official support for hybrid search.</td>
+        </tr>
+        <tr id="src-s17">
+          <td>S17</td>
+          <td><a href="https://qdrant.tech/documentation/search/filtering/" target="_blank" rel="noopener">Qdrant — Filtering</a></td>
+          <td>Official payload-filtering behavior for vector retrieval.</td>
+        </tr>
+        <tr id="src-s18">
+          <td>S18</td>
+          <td><a href="https://www.elastic.co/elasticsearch/hybrid-search" target="_blank" rel="noopener">Elastic — Hybrid search</a></td>
+          <td>Official framing for lexical plus semantic retrieval.</td>
+        </tr>
+        <tr id="src-s19">
+          <td>S19</td>
+          <td><a href="https://www.sec.gov/search-filings/edgar-application-programming-interfaces" target="_blank" rel="noopener">SEC — EDGAR application programming interfaces</a></td>
+          <td>Primary public validation path for searchable filings and APIs.</td>
+        </tr>
+        <tr id="src-s20">
+          <td>S20</td>
+          <td><a href="https://www.sec.gov/resources-small-businesses/exempt-offerings/regulation-crowdfunding" target="_blank" rel="noopener">SEC — Regulation Crowdfunding</a></td>
+          <td>Primary source for Reg CF overview and investor-access context.</td>
+        </tr>
+        <tr id="src-s21">
+          <td>S21</td>
+          <td><a href="https://www.sec.gov/files/formc.pdf" target="_blank" rel="noopener">SEC — Form C</a></td>
+          <td>Primary source for Reg CF filing form and offering disclosures.</td>
+        </tr>
+        <tr id="src-s22">
+          <td>S22</td>
+          <td><a href="https://www.sec.gov/resources-small-businesses/small-business-compliance-guides/insider-trading-arrangements-and-related-disclosures" target="_blank" rel="noopener">SEC — Insider trading arrangements and related disclosures</a></td>
+          <td>Compliance framework for trading-policy considerations.</td>
+        </tr>
+        <tr id="src-s23">
+          <td>S23</td>
+          <td><a href="https://www.sec.gov/files/rules/interp/2019/ia-5248.pdf" target="_blank" rel="noopener">SEC — Commission interpretation regarding standard of conduct for investment advisers</a></td>
+          <td>Fiduciary duty of care and loyalty.</td>
+        </tr>
+        <tr id="src-s24">
+          <td>S24</td>
+          <td><a href="https://commission.europa.eu/law/law-topic/data-protection_en" target="_blank" rel="noopener">European Commission — Data protection</a></td>
+          <td>Primary-policy backdrop for GDPR and privacy controls.</td>
+        </tr>
+        <tr id="src-s25">
+          <td>S25</td>
+          <td><a href="https://github.com/microsoft/presidio" target="_blank" rel="noopener">Microsoft Presidio — GitHub repository</a></td>
+          <td>Practical open-source PII detection and anonymization tooling.</td>
+        </tr>
+        <tr id="src-s26">
+          <td>S26</td>
+          <td><a href="https://a16z.com/podcasts/" target="_blank" rel="noopener">a16z — Podcast network</a></td>
+          <td>Primary source for the scale and nature of a16z’s podcast ecosystem.</td>
+        </tr>
+        <tr id="src-s27">
+          <td>S27</td>
+          <td><a href="https://a16z.com/podcast/my-first-16-doubling-down-on-founder-led-sales-with-pilots-waseem-daher/" target="_blank" rel="noopener">a16z — My First 16 with Pilot’s Waseem Daher</a></td>
+          <td>Example of founder-origin and operating-detail signals.</td>
+        </tr>
+        <tr id="src-s28">
+          <td>S28</td>
+          <td><a href="https://a16z.com/podcast/my-first-16-competing-in-a-crowd-of-incumbents-with-mercurys-immad-akhund/" target="_blank" rel="noopener">a16z — My First 16 with Mercury’s Immad Akhund</a></td>
+          <td>Example of category-thesis and founder-timing signals.</td>
+        </tr>
+        <tr id="src-s29">
+          <td>S29</td>
+          <td><a href="https://a16z.com/podcast/how-mintlify-is-rebuilding-documentation-for-coding-agents/" target="_blank" rel="noopener">a16z — How Mintlify is rebuilding documentation for coding agents</a></td>
+          <td>Example of early narrative signal in AI tooling.</td>
+        </tr>
+        <tr id="src-s30">
+          <td>S30</td>
+          <td><a href="https://kingscrowd.com/deal-type/podcasts/inside-startup-investing/" target="_blank" rel="noopener">KingsCrowd — Inside Startup Investing archive</a></td>
+          <td>Primary source for the niche private-markets podcast universe examined here.</td>
+        </tr>
+        <tr id="src-s31">
+          <td>S31</td>
+          <td><a href="https://kingscrowd.com/inside-startup-investing-episode-160/" target="_blank" rel="noopener">KingsCrowd — Cleveland Whiskey episode</a></td>
+          <td>Case study showing podcast content linked to a live platform opportunity.</td>
+        </tr>
+        <tr id="src-s32">
+          <td>S32</td>
+          <td><a href="https://kingscrowd.com/inside-startup-investing-podcast-episode-140/" target="_blank" rel="noopener">KingsCrowd — Health Care Originals episode</a></td>
+          <td>Case study showing traction-heavy claims that merit validation.</td>
+        </tr>
+        <tr id="src-s33">
+          <td>S33</td>
+          <td><a href="https://joincolossus.com/episode/kopelman-the-past-present-and-future-of-seed-investing/?tab=shownotes" target="_blank" rel="noopener">Colossus — Shownotes with sponsors example</a></td>
+          <td>Example of sponsor and topic segmentation that should feed bias controls.</td>
+        </tr>
+        <tr id="src-s34">
+          <td>S34</td>
+          <td><a href="https://joincolossus.com/episode/goldstein-dupont-specialty-chemicals/?tab=transcript" target="_blank" rel="noopener">Colossus — Transcript tab example</a></td>
+          <td>Example that some premium or structured transcript surfaces are gated and therefore not universally collectible.</td>
+        </tr>
+        <tr id="src-s35">
+          <td>S35</td>
+          <td><a href="https://data.crunchbase.com/docs/welcome-to-crunchbase-data" target="_blank" rel="noopener">Crunchbase — Welcome to Crunchbase data</a></td>
+          <td>Commercial company and funding-data reference for enrichment and validation.</td>
+        </tr>
+        <tr id="src-s36">
+          <td>S36</td>
+          <td><a href="https://pitchbook.com/products/direct-access-data/api" target="_blank" rel="noopener">PitchBook — Direct access data API</a></td>
+          <td>Commercial API source for deal, people, investor, and fund tracking.</td>
+        </tr>
+        <tr id="src-s37">
+          <td>S37</td>
+          <td><a href="https://arxiv.org/pdf/2509.26177" target="_blank" rel="noopener">Recent speaker-diarization survey discussing DER, WDER, and JER</a></td>
+          <td>Support for diarization-metric discussion and why speaker error propagates downstream.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="foot">This report is analytical research, not legal or investment advice. Any production use should be reviewed by counsel and compliance staff before integration into trading, advisory, or client-facing workflows.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+  const hoursRange = document.getElementById('hoursRange');
+  const werRange = document.getElementById('werRange');
+  const thresholdRange = document.getElementById('thresholdRange');
+
+  const hoursOut = document.getElementById('hoursOut');
+  const werOut = document.getElementById('werOut');
+  const thresholdOut = document.getElementById('thresholdOut');
+
+  const kpiRaw = document.getElementById('kpiRaw');
+  const kpiValidated = document.getElementById('kpiValidated');
+  const kpiAlerts = document.getElementById('kpiAlerts');
+  const kpiSpend = document.getElementById('kpiSpend');
+
+  const qaHoursCell = document.getElementById('qaHoursCell');
+  const reviewHoursCell = document.getElementById('reviewHoursCell');
+  const alertsWeekCell = document.getElementById('alertsWeekCell');
+  const precisionCell = document.getElementById('precisionCell');
+  const cadenceText = document.getElementById('cadenceText');
+
+  const barRaw = document.getElementById('barRaw');
+  const barValidated = document.getElementById('barValidated');
+  const barAlerts = document.getElementById('barAlerts');
+  const barRawVal = document.getElementById('barRawVal');
+  const barValidatedVal = document.getElementById('barValidatedVal');
+  const barAlertsVal = document.getElementById('barAlertsVal');
+
+  const costAssembly = document.getElementById('costAssembly');
+  const totalAssembly = document.getElementById('totalAssembly');
+  const costDeepgram = document.getElementById('costDeepgram');
+  const totalDeepgram = document.getElementById('totalDeepgram');
+  const costGoogle = document.getElementById('costGoogle');
+  const totalGoogle = document.getElementById('totalGoogle');
+  const costAWS = document.getElementById('costAWS');
+  const totalAWS = document.getElementById('totalAWS');
+  const costEmbed = document.getElementById('costEmbed');
+
+  const sttRates = {
+    assembly: 0.21,
+    deepgram: 0.462,
+    google: 0.96,
+    aws: 1.44
+  };
+
+  function fmtMoney(n){
+    return '$' + n.toLocaleString(undefined, {maximumFractionDigits: n < 10 ? 2 : 0});
+  }
+  function fmtNum(n){
+    return n.toLocaleString(undefined, {maximumFractionDigits: 0});
+  }
+  function clamp(x, a, b){
+    return Math.max(a, Math.min(b, x));
+  }
+
+  function model(hours, werTol, threshold){
+    const acceptedCoverage = 0.55 + 0.45 * werTol;
+    const rawCandidates = hours * 0.24 * acceptedCoverage;
+
+    const validationFactor = (0.44 + 0.30 * ((100 - threshold) / 100)) * (1 - 0.20 * werTol);
+    const validated = rawCandidates * validationFactor;
+
+    const alertFactor = clamp(0.65 - 0.50 * (threshold / 100), 0.10, 0.70);
+    const priorityAlerts = validated * alertFactor;
+
+    const strictness = clamp((0.25 - werTol) / 0.25, 0, 1);
+    const qaHours = hours * (0.02 + 0.06 * strictness);
+    const reviewHours = validated * 0.30;
+    const laborRate = 85;
+    const laborCost = (qaHours + reviewHours) * laborRate;
+
+    const embedTokensPerHour = 12000;
+    const embeddingCost = (hours * embedTokensPerHour / 1000000) * 0.02;
+
+    let hosting = 90;
+    if (hours > 100) hosting = 150;
+    if (hours > 300) hosting = 240;
+    if (hours > 700) hosting = 380;
+
+    const spendBase = laborCost + embeddingCost + hosting;
+    const precisionProxy = rawCandidates > 0 ? validated / rawCandidates : 0;
+    const alertsPerWeek = priorityAlerts / 4.33;
+
+    return {
+      rawCandidates,
+      validated,
+      priorityAlerts,
+      qaHours,
+      reviewHours,
+      embeddingCost,
+      hosting,
+      spendBase,
+      precisionProxy,
+      alertsPerWeek
+    };
+  }
+
+  function update(){
+    const hours = Number(hoursRange.value);
+    const werTol = Number(werRange.value);
+    const threshold = Number(thresholdRange.value);
+
+    hoursOut.value = hours + ' h/mo';
+    werOut.value = werTol.toFixed(2) + ' WER';
+    thresholdOut.value = String(threshold);
+
+    const m = model(hours, werTol, threshold);
+
+    const raw = Math.round(m.rawCandidates);
+    const val = Math.round(m.validated);
+    const alerts = Math.round(m.priorityAlerts);
+
+    kpiRaw.textContent = fmtNum(raw);
+    kpiValidated.textContent = fmtNum(val);
+    kpiAlerts.textContent = fmtNum(alerts);
+
+    const blendedDefault = m.spendBase + hours * sttRates.assembly;
+    kpiSpend.textContent = fmtMoney(blendedDefault);
+
+    qaHoursCell.textContent = m.qaHours.toFixed(1) + ' h/mo';
+    reviewHoursCell.textContent = m.reviewHours.toFixed(1) + ' h/mo';
+    alertsWeekCell.textContent = m.alertsPerWeek.toFixed(1);
+    precisionCell.textContent = (m.precisionProxy * 100).toFixed(1) + '%';
+
+    const maxBar = Math.max(raw, 1);
+    barRaw.style.width = '100%';
+    barValidated.style.width = (val / maxBar * 100).toFixed(1) + '%';
+    barAlerts.style.width = (alerts / maxBar * 100).toFixed(1) + '%';
+
+    barRawVal.textContent = fmtNum(raw);
+    barValidatedVal.textContent = fmtNum(val);
+    barAlertsVal.textContent = fmtNum(alerts);
+
+    const assembly = hours * sttRates.assembly;
+    const deepgram = hours * sttRates.deepgram;
+    const google = hours * sttRates.google;
+    const aws = hours * sttRates.aws;
+
+    costAssembly.textContent = fmtMoney(assembly);
+    totalAssembly.textContent = fmtMoney(m.spendBase + assembly);
+    costDeepgram.textContent = fmtMoney(deepgram);
+    totalDeepgram.textContent = fmtMoney(m.spendBase + deepgram);
+    costGoogle.textContent = fmtMoney(google);
+    totalGoogle.textContent = fmtMoney(m.spendBase + google);
+    costAWS.textContent = fmtMoney(aws);
+    totalAWS.textContent = fmtMoney(m.spendBase + aws);
+    costEmbed.textContent = fmtMoney(m.embeddingCost);
+
+    let cadence = '';
+    if (alerts < 4) {
+      cadence = 'Weekly digest is usually sufficient, with same-day review only for manually escalated items. This posture fits a narrow monitored universe or a high lead-score threshold.';
+    } else if (alerts < 15) {
+      cadence = 'Daily morning digest plus same-day review for high-score leads is usually the right balance. A single analyst can normally manage the queue without intra-day paging.';
+    } else if (alerts < 40) {
+      cadence = 'Twice-daily queue review is recommended. Use a morning digest, a midday refresh, and explicit bias filters so the analyst does not drown in sponsor or portfolio noise.';
+    } else {
+      cadence = 'Use an intra-day queue with de-duplication, rotating analyst coverage, and a weekly investment-review meeting. At this level, threshold discipline and validation automation matter more than adding more podcasts.';
+    }
+    if (werTol > 0.35) {
+      cadence += ' Because the WER tolerance is relatively loose, increase manual spot-checking on entity-heavy segments and consider stricter alias validation before issuing alerts.';
+    }
+    if (threshold < 40) {
+      cadence += ' Because the lead-score threshold is low, expect more exploratory noise and stronger dependence on validation controls.';
+    }
+    if (threshold > 85) {
+      cadence += ' Because the threshold is high, some early weak signals will be intentionally missed in exchange for analyst efficiency.';
+    }
+    cadenceText.textContent = cadence;
+  }
+
+  [hoursRange, werRange, thresholdRange].forEach(el => el.addEventListener('input', update));
+  update();
+})();
+</script>
+</body>
+</html>
